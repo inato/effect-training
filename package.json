@@ -1,0 +1,13 @@
+{
+  "name": "effect-training",
+  "type": "module",
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "effect": "^2.3.5"
+  }
+}
