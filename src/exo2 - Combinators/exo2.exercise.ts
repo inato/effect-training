@@ -1,7 +1,15 @@
 // `fp-ts` training Exercise 2
 // Let's have fun with combinators!
 
-import { Effect, type Either, type Option } from "effect";
+import {
+  Effect,
+  ReadonlyArray,
+  type Either,
+  type Option,
+  flow,
+  pipe,
+} from "effect";
+
 import { unimplemented } from "../utils";
 
 ///////////////////////////////////////////////////////////////////////////////

@@ -1,5 +1,11 @@
-import { either, reader, readerTaskEither as rte } from "effect";
-import { pipe } from "effect/function";
+import {
+  Effect,
+  ReadonlyArray,
+  type Either,
+  type Option,
+  flow,
+  pipe,
+} from "effect";
 import * as exercise from "./exo8.exercise";
 import * as solution from "./exo8.solution";
 import { isTestingSolution } from "../testUtils";

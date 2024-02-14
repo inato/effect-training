@@ -1,10 +1,14 @@
 // `fp-ts` training Exercise 8
 // Define your own combinators
 
-import { Either } from "effect/Either";
-import { Reader } from "effect/Reader";
-import { ReaderTaskEither } from "effect/ReaderTaskEither";
-import { readerTaskEither as rte } from "effect";
+import {
+  Effect,
+  ReadonlyArray,
+  type Either,
+  type Option,
+  flow,
+  pipe,
+} from "effect";
 
 // Technically, a combinator is a pure function with no free variables in it,
 // i.e. one that does not depend on any variable from its enclosing scope.

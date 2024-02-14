@@ -1,7 +1,14 @@
 // `fp-ts` training Exercise 4
 // Dependency injection with `Reader`
 
-import { Reader } from "effect/Reader";
+import {
+  Effect,
+  ReadonlyArray,
+  type Either,
+  type Option,
+  flow,
+  pipe,
+} from "effect";
 
 import { unimplemented } from "../utils";
 

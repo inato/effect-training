@@ -1,10 +1,16 @@
 // `fp-ts` training Exercise 2
 // Let's have fun with combinators!
 
-import { Option } from "effect/Option";
 import { Failure } from "../Failure";
-import { either, option, readonlyArray } from "effect";
-import { flow, pipe } from "effect/lib/function";
+
+import {
+  Effect,
+  ReadonlyArray,
+  type Either,
+  type Option,
+  flow,
+  pipe,
+} from "effect";
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                   SETUP                                   //

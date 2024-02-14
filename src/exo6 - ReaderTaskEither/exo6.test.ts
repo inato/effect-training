@@ -1,4 +1,11 @@
-import { either } from "effect";
+import {
+  Effect,
+  ReadonlyArray,
+  type Either,
+  type Option,
+  flow,
+  pipe,
+} from "effect";
 import { Application } from "./application";
 import { User } from "./domain";
 import * as exercise from "./exo6.exercise";

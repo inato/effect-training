@@ -1,4 +1,11 @@
-import { option } from "effect";
+import {
+  Effect,
+  ReadonlyArray,
+  type Either,
+  type Option,
+  flow,
+  pipe,
+} from "effect";
 import * as exercise from "./exo3.exercise";
 import * as solution from "./exo3.solution";
 import { isTestingSolution } from "../testUtils";

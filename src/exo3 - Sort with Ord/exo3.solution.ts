@@ -1,9 +1,14 @@
 // `fp-ts` training Exercise 3
 // Sort things out with `Ord`
 
-import { readonlyArray, string, number, option, ord } from "effect";
-import { pipe } from "effect/function";
-import { Option } from "effect/Option";
+import {
+  Effect,
+  ReadonlyArray,
+  type Either,
+  type Option,
+  flow,
+  pipe,
+} from "effect";
 
 // Have you ever looked at the methods provided by `fp-ts` own `Array` and
 // `ReadonlyArray` modules? They expose a load of functions to manipulate

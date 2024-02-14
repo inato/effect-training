@@ -1,9 +1,14 @@
 // `fp-ts` training Exercise 4
 // Dependency injection with `Reader`
 
-import { reader } from "effect";
-import { flow, pipe } from "effect/function";
-import { Reader } from "effect/Reader";
+import {
+  Effect,
+  ReadonlyArray,
+  type Either,
+  type Option,
+  flow,
+  pipe,
+} from "effect";
 
 // Sometimes, a function can have a huge amount of dependencies (services,
 // repositories, ...) and it is often impractical (not to say truly annoying)

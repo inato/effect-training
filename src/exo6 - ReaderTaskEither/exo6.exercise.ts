@@ -1,7 +1,15 @@
 // `fp-ts` training Exercise 6
 // Introduction to `ReaderTaskEither`
 
-import { ReaderTaskEither } from "effect/lib/ReaderTaskEither";
+import {
+  Effect,
+  ReadonlyArray,
+  type Either,
+  type Option,
+  flow,
+  pipe,
+} from "effect";
+
 import { unimplemented } from "../utils";
 import { Application } from "./application";
 import { User } from "./domain";

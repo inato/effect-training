@@ -1,12 +1,16 @@
 // `fp-ts` training Exercise 5
 // Managing nested effectful data with `traverse`
 
-import { option, readonlyRecord, task } from "effect";
-import { pipe } from "effect/lib/function";
-import { Option } from "effect/lib/Option";
-import { ReadonlyRecord } from "effect/lib/ReadonlyRecord";
-import { Task } from "effect/lib/Task";
-import { sleep, unimplemented, unimplementedAsync } from "../utils";
+import {
+  Effect,
+  ReadonlyArray,
+  type Either,
+  type Option,
+  flow,
+  pipe,
+} from "effect";
+
+import { sleep, unimplemented } from "../utils";
 
 // When using many different Functors in a complex application, we can easily
 // get to a point when we have many nested types that we would like to 'merge',

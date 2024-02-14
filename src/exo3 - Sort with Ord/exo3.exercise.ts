@@ -1,7 +1,15 @@
 // `fp-ts` training Exercise 3
 // Sort things out with `Ord`
 
-import { Option } from "effect/Option";
+import {
+  Effect,
+  ReadonlyArray,
+  type Either,
+  type Option,
+  flow,
+  pipe,
+} from "effect";
+
 import { unimplemented } from "../utils";
 
 // Have you ever looked at the methods provided by `fp-ts` own `Array` and

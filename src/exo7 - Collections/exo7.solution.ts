@@ -2,14 +2,13 @@
 // Manipulate collections with type-classes
 
 import {
-  number,
-  readonlyArray,
-  readonlyMap,
-  readonlySet,
-  semigroup,
-  string,
+  Effect,
+  ReadonlyArray,
+  type Either,
+  type Option,
+  flow,
+  pipe,
 } from "effect";
-import { pipe } from "effect/function";
 
 // In this exercise, we will learn how to manipulate essential collections
 // such as `Set` and `Map`.
