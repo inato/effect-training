@@ -19,8 +19,8 @@ export const divide = (a: number, b: number): number => {
 // safeDivide : (a: number, b: number) => Option<number>
 //
 // HINT: Option has two basic constructors:
-// - `option.some(value)`
-// - `option.none`
+// - `Option.some(value)`
+// - `Option.none`
 
 export const safeDivide: (a: number, b: number) => Option.Option<number> =
   unimplemented;

@@ -180,11 +180,11 @@ export const checkAttackerAndShoot = (attacker: Option<Character>) =>
 // BONUS POINTS: If you properly defined small private helpers in the previous
 // section, they should be easily reused for those use-cases.
 
-export const smashOption = flow(smash, option.fromEither);
+export const smashOption = flow(smash, Option.fromEither);
 
-export const burnOption = flow(burn, option.fromEither);
+export const burnOption = flow(burn, Option.fromEither);
 
-export const shootOption = flow(shoot, option.fromEither);
+export const shootOption = flow(shoot, Option.fromEither);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                   ARRAY                                   //

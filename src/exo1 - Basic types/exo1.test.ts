@@ -27,12 +27,12 @@ describe("exo1", () => {
 
   describe("safeDivide", () => {
     it("should return the result of dividing two numbers", () => {
-      expect(safeDivide(25, 5)).toStrictEqual(option.some(5));
+      expect(safeDivide(25, 5)).toStrictEqual(Option.some(5));
     });
 
-    it("should return option.none if the denominator is zero", () => {
-      expect(safeDivide(25, 0)).toStrictEqual(option.none);
-      expect(safeDivide(-25, 0)).toStrictEqual(option.none);
+    it("should return Option.none if the denominator is zero", () => {
+      expect(safeDivide(25, 0)).toStrictEqual(Option.none);
+      expect(safeDivide(-25, 0)).toStrictEqual(Option.none);
     });
   });
 

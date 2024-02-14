@@ -78,7 +78,7 @@ export const naiveGiveCurrencyOfCountryToUser = (
   pipe(
     getCountryNameFromUser(countryNameFromUserMock),
     task.map(getCountryCode),
-    task.map(option.map(getCountryCurrency))
+    task.map(Option.map(getCountryCurrency))
   );
 
 // The result type of this method is: `Task<Option<Task<Currency>>>`
@@ -90,12 +90,12 @@ export const naiveGiveCurrencyOfCountryToUser = (
 // First we need a way to transform our `Option<Task<Currency>>` to
 // `Task<Option<Currency>>`
 // That's precisely what traverse is about.
-// Use `option.traverse` to implement `getCountryCurrencyOfOptionalCountryCode`
+// Use `Option.traverse` to implement `getCountryCurrencyOfOptionalCountryCode`
 // below. This function takes an `Option<CountryCode>`, should apply
 // `getCountryCurrency` to the `CountryCode` and make it so that the result
 // is `Task<Option<Currency>>`
 //
-// HINT: `option.traverse` asks for an Applicative as the first parameter. You
+// HINT: `Option.traverse` asks for an Applicative as the first parameter. You
 // can find it for `Task` in `task.ApplicativePar`
 
 export const getCountryCurrencyOfOptionalCountryCode: (
@@ -148,7 +148,7 @@ export const getCountryCodeOfCountryNames = (
 // of country names and returns an option of an array of country codes.
 //
 // HINT: while `readonlyArray.traverse` exists, you have a shortcut in the `option`
-// module: `option.traverseArray`
+// module: `Option.traverseArray`
 
 export const getValidCountryCodeOfCountryNames: (
   countryNames: ReadonlyArray<string>

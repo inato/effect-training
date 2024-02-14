@@ -74,7 +74,7 @@ export const naiveGiveCurrencyOfCountryToUser = (
   pipe(
     getCountryNameFromUser(countryNameFromUserMock),
     task.map(getCountryCode),
-    task.map(option.map(getCountryCurrency))
+    task.map(Option.map(getCountryCurrency))
   );
 
 // The result type of this method is: `Task<Option<Task<Currency>>>`
@@ -86,17 +86,17 @@ export const naiveGiveCurrencyOfCountryToUser = (
 // First we need a way to transform our `Option<Task<Currency>>` to
 // `Task<Option<Currency>>`
 // That's precisely what traverse is about.
-// Use `option.traverse` to implement `getCountryCurrencyOfOptionalCountryCode`
+// Use `Option.traverse` to implement `getCountryCurrencyOfOptionalCountryCode`
 // below. This function takes an `Option<CountryCode>`, should apply
 // `getCountryCurrency` to the `CountryCode` and make it so that the result
 // is `Task<Option<Currency>>`
 //
-// HINT: `option.traverse` asks for an Applicative as the first parameter. You
+// HINT: `Option.traverse` asks for an Applicative as the first parameter. You
 // can find it for `Task` in `task.ApplicativePar`
 
 export const getCountryCurrencyOfOptionalCountryCode: (
   optionalCountryCode: Option<CountryCode>
-) => Task<Option<Currency>> = option.traverse(task.ApplicativePar)(
+) => Task<Option<Currency>> = Option.traverse(task.ApplicativePar)(
   getCountryCurrency
 );
 
@@ -162,11 +162,11 @@ export const getCountryCodeOfCountryNames = (
 // of country names and returns an option of an array of country codes.
 //
 // HINT: while `readonlyArray.traverse` exists, you have a shortcut in the `option`
-// module: `option.traverseArray`
+// module: `Option.traverseArray`
 
 export const getValidCountryCodeOfCountryNames: (
   countryNames: ReadonlyArray<string>
-) => Option<ReadonlyArray<CountryCode>> = option.traverseArray(getCountryCode);
+) => Option<ReadonlyArray<CountryCode>> = Option.traverseArray(getCountryCode);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                   TRAVERSING ARRAYS ASYNCHRONOUSLY                        //
@@ -242,11 +242,11 @@ export const performAsyncComputationInSequence: (
 
 export const sequenceOptionTask: (
   optionOfTask: Option<Task<Currency>>
-) => Task<Option<Currency>> = option.sequence(task.ApplicativePar);
+) => Task<Option<Currency>> = Option.sequence(task.ApplicativePar);
 
 export const sequenceOptionArray: (
   arrayOfOptions: ReadonlyArray<Option<CountryCode>>
-) => Option<ReadonlyArray<CountryCode>> = option.sequenceArray;
+) => Option<ReadonlyArray<CountryCode>> = Option.sequenceArray;
 
 // BONUS: try using these two functions in the exercises 'TRAVERSING OPTIONS'
 // and 'TRAVERSING ARRAYS' above

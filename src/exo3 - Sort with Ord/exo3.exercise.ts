@@ -72,14 +72,14 @@ export const sortNumbersDescending: (
 ///////////////////////////////////////////////////////////////////////////////
 
 // This next function will sort an array of numbers wrapped in `Option` with
-// the following constraint: `option.none` < `option.some(_)`.
+// the following constraint: `Option.none` < `Option.some(_)`.
 //
 // As such, we cannot simply use `number.Ord` because it has type `Ord<number>`
 // and we need an instance of `Ord<Option<number>>`.
 //
 // HINT: Some of `fp-ts` wrapper types such as `Option` do already have a way
 // of building an `Ord` instance for their qualified inner type. You may want
-// to take a look at `option.getOrd`.
+// to take a look at `Option.getOrd`.
 
 export const sortOptionalNumbers: (
   optionalNumbers: ReadonlyArray<Option<number>>

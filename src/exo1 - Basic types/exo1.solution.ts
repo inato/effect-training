@@ -4,7 +4,7 @@
 // - Either
 // - TaskEither
 
-import type { Effect, Option } from "effect";
+import { Effect, Option } from "effect";
 import { flow, pipe } from "effect";
 
 import { sleep } from "../utils";
@@ -21,15 +21,15 @@ export const divide = (a: number, b: number): number => {
 // safeDivide : (a: number, b: number) => Option<number>
 //
 // HINT: Option has two basic constructors:
-// - `option.some(value)`
-// - `option.none`
+// - `Option.some(value)`
+// - `Option.none`
 
 export const safeDivide = (a: number, b: number) => {
   if (b === 0) {
-    return option.none;
+    return Option.none();
   }
 
-  return option.some(a / b);
+  return Option.some(a / b);
 };
 
 // You probably wrote `safeDivide` using `if` statements and it's perfectly valid!
@@ -44,8 +44,8 @@ export const safeDivide = (a: number, b: number) => {
 export const safeDivideBonus = (a: number, b: number) =>
   pipe(
     b,
-    option.fromPredicate((n) => n != 0),
-    option.map((b) => a / b)
+    Option.fromPredicate((n) => n != 0),
+    Option.map((b) => a / b)
   );
 
 ///////////////////////////////////////////////////////////////////////////////
