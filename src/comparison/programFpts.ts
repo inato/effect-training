@@ -12,6 +12,8 @@ import type { Option } from "fp-ts/lib/Option";
 import type { TaskEither } from "fp-ts/lib/TaskEither";
 import { pipe } from "fp-ts/lib/function";
 
+// Repository and services
+
 type UserId = string;
 interface User {
   id: UserId;
@@ -49,6 +51,27 @@ const getThisYear = () =>
     reader.map(({ timeService }) => timeService.thisYear())
   );
 
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
+// Mapping ReaderTaskEither
+
 const capitalize = (str: string) =>
   `${str.charAt(0).toUpperCase()}${str.slice(1)}`;
 
@@ -57,6 +80,57 @@ export const getCapitalizedUserName = (userId: string) =>
     getUserById(userId),
     readerTaskEither.map((user) => capitalize(user.name))
   );
+
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
+// Concurrency using apS or traverseArray
 
 export const getConcatenationOfTheTwoUserNames = ({
   userIdOne,
@@ -88,6 +162,36 @@ export const getConcatenationOfManyUserNames = (userIds: Array<string>) =>
     readerTaskEither.map(readonlyArray.reduce("", (acc, name) => acc + name))
   );
 
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
+// Sequential tasks
+
 export const getConcatenationOfTheBestFriendNameAndUserName = ({
   userIdOne,
 }: {
@@ -105,6 +209,50 @@ export const getConcatenationOfTheBestFriendNameAndUserName = ({
     )
   );
 
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
+// Running a program //
+
 export const getConcatenationOfUserNameAndCurrentYear = (userId: UserId) =>
   pipe(
     readerTaskEither.Do,
@@ -113,23 +261,21 @@ export const getConcatenationOfUserNameAndCurrentYear = (userId: UserId) =>
     readerTaskEither.map(({ user, year }) => `${user.name}${year}`)
   );
 
-// Running a program //
+const timeService: TimeService = {
+  thisYear: () => 2021,
+};
 
-async function main() {
-  const timeService: TimeService = {
-    thisYear: () => 2021,
-  };
+const userRepository: UserRepository = {
+  findById(id) {
+    return taskEither.right(
+      option.some({ id, name: "name", bestFriendId: "userId" })
+    );
+  },
+};
 
-  const userRepository: UserRepository = {
-    findById(id) {
-      return taskEither.right(
-        option.some({ id, name: "name", bestFriendId: "userId" })
-      );
-    },
-  };
-
-  const result = await getConcatenationOfUserNameAndCurrentYear("1")({
-    timeService,
-    userRepository,
-  })();
-}
+getConcatenationOfUserNameAndCurrentYear("1")({
+  timeService,
+  userRepository,
+})()
+  .then(console.log)
+  .catch(console.error);

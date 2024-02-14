@@ -1,6 +1,19 @@
 // `Effect` version of a program
 
-import { pipe, Effect, Context, Option, ReadonlyArray } from "effect";
+import {
+  pipe,
+  Effect,
+  Context,
+  Option,
+  ReadonlyArray,
+  Layer,
+  Runtime,
+  Scope,
+  Exit,
+} from "effect";
+import { cons } from "effect/List";
+
+// Repository and services
 
 type UserId = string;
 interface User {
@@ -38,6 +51,26 @@ const TimeService = Context.GenericTag<TimeService>("TimeService");
 const getThisYear = (): Effect.Effect<number, never, TimeService> =>
   Effect.map(TimeService, (timeService) => timeService.thisYear());
 
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
+// Mapping Effects
+
 const capitalize = (str: string) =>
   `${str.charAt(0).toUpperCase()}${str.slice(1)}`;
 
@@ -46,6 +79,58 @@ export const getCapitalizedUserName = (userId: string) =>
     getUserById(userId),
     Effect.map((user) => capitalize(user.name))
   );
+
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
+// Concurrency using Effect.all
 
 export const getConcatenationOfTheTwoUserNames = ({
   userIdOne,
@@ -72,6 +157,39 @@ export const getConcatenationOfManyUserNames = (userIds: Array<string>) =>
     Effect.map(ReadonlyArray.join(""))
   );
 
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
+// Sequential tasks
+
 export const getConcatenationOfTheBestFriendNameAndUserName = (
   userId: UserId
 ) =>
@@ -94,35 +212,124 @@ export const getConcatenationOfTheBestFriendNameAndUserNameGen = (
     return `${capitalize(userOne.name)}${capitalize(userTwo.name)}`;
   });
 
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
+
+// Running a program //
+
+const timeService: TimeService = {
+  thisYear: () => 2024,
+};
+
+const userRepository: UserRepository = {
+  findById(id) {
+    return Effect.succeed(
+      Option.some({ id, name: "name", bestFriendId: "userId" })
+    );
+  },
+};
+
 export const getConcatenationOfUserNameAndCurrentYear = (userId: UserId) =>
   pipe(
     Effect.all({
       user: getUserById(userId),
       year: getThisYear(),
     }),
-    Effect.map(({ user, year }) => `${user.name}${year}`)
+    Effect.map(({ user, year }) => `${user.name}${year}`),
+    Effect.withConcurrency("unbounded")
   );
 
-// Running a program //
+const runnable = pipe(
+  getConcatenationOfUserNameAndCurrentYear("1"),
+  Effect.provideService(UserRepository, userRepository),
+  Effect.provideService(TimeService, timeService),
+  Effect.either
+);
 
-async function main() {
-  const timeService: TimeService = {
-    thisYear: () => 2021,
-  };
+Effect.runPromise(runnable).then(console.log).catch(console.error);
 
-  const userRepository: UserRepository = {
-    findById(id) {
-      return Effect.succeed(
-        Option.some({ id, name: "name", bestFriendId: "userId" })
-      );
-    },
-  };
+/**
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ */
 
-  const result = await pipe(
-    getConcatenationOfUserNameAndCurrentYear("1"),
-    Effect.provideService(UserRepository, userRepository),
-    Effect.provideService(TimeService, timeService),
-    Effect.either,
-    Effect.runPromise
-  );
-}
+// Running a program with a runtime
+
+const appLayer = Layer.mergeAll(
+  Layer.succeed(TimeService, timeService),
+  Layer.succeed(UserRepository, userRepository)
+);
+
+const scope = Effect.runSync(Scope.make());
+
+// Transform the configuration layer into a runtime
+const runtime = await Effect.runPromise(
+  Layer.toRuntime(appLayer).pipe(Scope.extend(scope))
+);
+
+const runPromise = Runtime.runPromise(runtime);
+
+const program = pipe(
+  getConcatenationOfUserNameAndCurrentYear("1"),
+  Effect.either
+);
+
+runPromise(program).then(console.log).catch(console.error);
+
+// Cleaning up any resources used by the configuration layer
+Effect.runFork(Scope.close(scope, Exit.unit));
