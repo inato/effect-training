@@ -1,12 +1,12 @@
 // `fp-ts` training Exercise 5
 // Managing nested effectful data with `traverse`
 
-import { option, readonlyRecord, task } from 'fp-ts';
-import { pipe } from 'fp-ts/lib/function';
-import { Option } from 'fp-ts/lib/Option';
-import { ReadonlyRecord } from 'fp-ts/lib/ReadonlyRecord';
-import { Task } from 'fp-ts/lib/Task';
-import { sleep, unimplemented, unimplementedAsync } from '../utils';
+import { option, readonlyRecord, task } from "effect";
+import { pipe } from "effect/lib/function";
+import { Option } from "effect/lib/Option";
+import { ReadonlyRecord } from "effect/lib/ReadonlyRecord";
+import { Task } from "effect/lib/Task";
+import { sleep, unimplemented, unimplementedAsync } from "../utils";
 
 // When using many different Functors in a complex application, we can easily
 // get to a point when we have many nested types that we would like to 'merge',
@@ -26,38 +26,38 @@ import { sleep, unimplemented, unimplementedAsync } from '../utils';
 
 // Let's consider a small range of countries (here, France, Spain and the USA)
 // with a mapping from their name to their code:
-type CountryCode = 'FR' | 'SP' | 'US';
+type CountryCode = "FR" | "SP" | "US";
 export const countryNameToCountryCode: ReadonlyRecord<string, CountryCode> = {
-  France: 'FR',
-  Spain: 'SP',
-  USA: 'US',
+  France: "FR",
+  Spain: "SP",
+  USA: "US",
 };
 
 // Let's simulate the call to an api which would return the currency when
 // providing a country code. For the sake of simplicity, let's consider that it
 // cannot fail.
-type Currency = 'EUR' | 'DOLLAR';
+type Currency = "EUR" | "DOLLAR";
 export const getCountryCurrency: (countryCode: CountryCode) => Task<Currency> =
   (countryCode: CountryCode): Task<Currency> =>
   async () => {
-    if (countryCode === 'US') {
-      return 'DOLLAR';
+    if (countryCode === "US") {
+      return "DOLLAR";
     }
-    return 'EUR';
+    return "EUR";
   };
 
 // Let's simulate a way for the user to provide a country name.
 // Let's consider that it cannot fail and let's add the possibility to set
 // the user's response as a parameter for easier testing.
 export const getCountryNameFromUser: (countryName: string) => Task<string> = (
-  countryName: string,
+  countryName: string
 ) => task.of(countryName);
 
 // Here's a function to retrieve the countryCode from a country name if it is
 // matching a country we support. This method returns an `Option` as we cannot
 // return anything if the given string is not matching a country name we know
 export const getCountryCode: (countryName: string) => Option<CountryCode> = (
-  countryName: string,
+  countryName: string
 ) => readonlyRecord.lookup(countryName)(countryNameToCountryCode);
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -69,12 +69,12 @@ export const getCountryCode: (countryName: string) => Option<CountryCode> = (
 // A naive implementation would be mapping on each `Task` and `Option` to call
 // the correct method:
 export const naiveGiveCurrencyOfCountryToUser = (
-  countryNameFromUserMock: string,
+  countryNameFromUserMock: string
 ) =>
   pipe(
     getCountryNameFromUser(countryNameFromUserMock),
     task.map(getCountryCode),
-    task.map(option.map(getCountryCurrency)),
+    task.map(option.map(getCountryCurrency))
   );
 
 // The result type of this method is: `Task<Option<Task<Currency>>>`
@@ -95,8 +95,8 @@ export const naiveGiveCurrencyOfCountryToUser = (
 // can find it for `Task` in `task.ApplicativePar`
 
 export const getCountryCurrencyOfOptionalCountryCode: (
-  optionalCountryCode: Option<CountryCode>,
-) => Task<Option<Currency>> = unimplementedAsync;
+  optionalCountryCode: Option<CountryCode>
+) => Task<Option<Currency>> = Effect.die;
 
 // Let's now use this function in our naive implementation's pipe to see how it
 // improves it.
@@ -107,8 +107,8 @@ export const getCountryCurrencyOfOptionalCountryCode: (
 // and make only few updates of it. The `task.flatMap` helper may be useful.
 
 export const giveCurrencyOfCountryToUser: (
-  countryNameFromUserMock: string,
-) => Task<Option<Currency>> = unimplementedAsync;
+  countryNameFromUserMock: string
+) => Task<Option<Currency>> = Effect.die;
 
 // BONUS: We don't necessarily need `traverse` to do this. Try implementing
 // `giveCurrencyOfCountryToUser` by lifting some of the functions' results to
@@ -122,7 +122,7 @@ export const giveCurrencyOfCountryToUser: (
 // of country names as `string` and we want to retrieve the country code of each.
 // Looks pretty easy:
 export const getCountryCodeOfCountryNames = (
-  countryNames: ReadonlyArray<string>,
+  countryNames: ReadonlyArray<string>
 ) => countryNames.map(getCountryCode);
 
 // As expected, we end up with a `ReadonlyArray<Option<CountryCode>>`. We know for
@@ -147,7 +147,7 @@ export const getCountryCodeOfCountryNames = (
 // module: `option.traverseArray`
 
 export const getValidCountryCodeOfCountryNames: (
-  countryNames: ReadonlyArray<string>,
+  countryNames: ReadonlyArray<string>
 ) => Option<ReadonlyArray<CountryCode>> = unimplemented;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -185,8 +185,8 @@ const createSimulatedAsyncMethod = (): ((toAdd: number) => Task<number>) => {
 
 export const simulatedAsyncMethodForParallel = createSimulatedAsyncMethod();
 export const performAsyncComputationInParallel: (
-  numbers: ReadonlyArray<number>,
-) => Task<ReadonlyArray<number>> = unimplementedAsync;
+  numbers: ReadonlyArray<number>
+) => Task<ReadonlyArray<number>> = Effect.die;
 
 // Write a method to traverse an array by running the method
 // `simulatedAsyncMethodForSequence: (toAdd: number) => Task<number>`
@@ -197,8 +197,8 @@ export const performAsyncComputationInParallel: (
 
 export const simulatedAsyncMethodForSequence = createSimulatedAsyncMethod();
 export const performAsyncComputationInSequence: (
-  numbers: ReadonlyArray<number>,
-) => Task<ReadonlyArray<number>> = unimplementedAsync;
+  numbers: ReadonlyArray<number>
+) => Task<ReadonlyArray<number>> = Effect.die;
 
 ///////////////////////////////////////////////////////////////////////////////
 //                               SEQUENCE                                    //
@@ -219,11 +219,11 @@ export const performAsyncComputationInSequence: (
 // functions below
 
 export const sequenceOptionTask: (
-  optionOfTask: Option<Task<Currency>>,
-) => Task<Option<Currency>> = unimplementedAsync;
+  optionOfTask: Option<Task<Currency>>
+) => Task<Option<Currency>> = Effect.die;
 
 export const sequenceOptionArray: (
-  arrayOfOptions: ReadonlyArray<Option<CountryCode>>,
+  arrayOfOptions: ReadonlyArray<Option<CountryCode>>
 ) => Option<ReadonlyArray<CountryCode>> = unimplemented;
 
 // BONUS: try using these two functions in the exercises 'TRAVERSING OPTIONS'

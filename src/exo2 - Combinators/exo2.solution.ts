@@ -1,10 +1,10 @@
 // `fp-ts` training Exercise 2
 // Let's have fun with combinators!
 
-import { Option } from 'fp-ts/Option';
-import { Failure } from '../Failure';
-import { either, option, readonlyArray } from 'fp-ts';
-import { flow, pipe } from 'fp-ts/lib/function';
+import { Option } from "effect/Option";
+import { Failure } from "../Failure";
+import { either, option, readonlyArray } from "effect";
+import { flow, pipe } from "effect/lib/function";
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                   SETUP                                   //
@@ -20,9 +20,9 @@ export type Character = Warrior | Wizard | Archer;
 
 // We have three types of `Damage`, each corresponding to a character type.
 export enum Damage {
-  Physical = 'Physical damage',
-  Magical = 'Magical damage',
-  Ranged = 'Ranged damage',
+  Physical = "Physical damage",
+  Magical = "Magical damage",
+  Ranged = "Ranged damage",
 }
 
 // A `Warrior` only can output physical damage.
@@ -32,7 +32,7 @@ export class Warrior {
   }
 
   toString() {
-    return 'Warrior';
+    return "Warrior";
   }
 }
 
@@ -43,7 +43,7 @@ export class Wizard {
   }
 
   toString() {
-    return 'Wizard';
+    return "Wizard";
   }
 }
 
@@ -54,7 +54,7 @@ export class Archer {
   }
 
   toString() {
-    return 'Archer';
+    return "Archer";
   }
 }
 
@@ -79,8 +79,8 @@ export const isArcher = (character: Character): character is Archer => {
 // - the player can try to perform the wrong action for a character class
 
 export enum Exo2FailureType {
-  NoAttacker = 'Exo2FailureType_NoAttacker',
-  InvalidAttacker = 'Exo2FailureType_InvalidAttacker',
+  NoAttacker = "Exo2FailureType_NoAttacker",
+  InvalidAttacker = "Exo2FailureType_InvalidAttacker",
 }
 
 export type NoAttackerFailure = Failure<Exo2FailureType.NoAttacker>;
@@ -88,7 +88,7 @@ export const noAttackerFailure = Failure.builder(Exo2FailureType.NoAttacker);
 
 export type InvalidAttackerFailure = Failure<Exo2FailureType.InvalidAttacker>;
 export const invalidAttackerFailure = Failure.builder(
-  Exo2FailureType.InvalidAttacker,
+  Exo2FailureType.InvalidAttacker
 );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -118,34 +118,34 @@ export const invalidAttackerFailure = Failure.builder(
 // the `flatMap` operator.
 
 const checkSelected = either.fromOption(() =>
-  noAttackerFailure('No attacker currently selected'),
+  noAttackerFailure("No attacker currently selected")
 );
 
-const checkWarrior = either.fromPredicate(isWarrior, character =>
-  invalidAttackerFailure(`${character.toString()} cannot perform smash`),
+const checkWarrior = either.fromPredicate(isWarrior, (character) =>
+  invalidAttackerFailure(`${character.toString()} cannot perform smash`)
 );
 
-const checkWizard = either.fromPredicate(isWizard, character =>
-  invalidAttackerFailure(`${character.toString()} cannot perform burn`),
+const checkWizard = either.fromPredicate(isWizard, (character) =>
+  invalidAttackerFailure(`${character.toString()} cannot perform burn`)
 );
 
-const checkArcher = either.fromPredicate(isArcher, character =>
-  invalidAttackerFailure(`${character.toString()} cannot perform shoot`),
+const checkArcher = either.fromPredicate(isArcher, (character) =>
+  invalidAttackerFailure(`${character.toString()} cannot perform shoot`)
 );
 
 const smash = flow(
   checkWarrior,
-  either.map(warrior => warrior.smash()),
+  either.map((warrior) => warrior.smash())
 );
 
 const burn = flow(
   checkWizard,
-  either.map(wizard => wizard.burn()),
+  either.map((wizard) => wizard.burn())
 );
 
 const shoot = flow(
   checkArcher,
-  either.map(archer => archer.shoot()),
+  either.map((archer) => archer.shoot())
 );
 
 export const checkAttackerAndSmash = (attacker: Option<Character>) =>
@@ -203,16 +203,16 @@ export const attack = (army: ReadonlyArray<Character>) => ({
   [Damage.Physical]: pipe(
     army,
     readonlyArray.filterMap(smashOption),
-    readonlyArray.size,
+    readonlyArray.size
   ),
   [Damage.Magical]: pipe(
     army,
     readonlyArray.filterMap(burnOption),
-    readonlyArray.size,
+    readonlyArray.size
   ),
   [Damage.Ranged]: pipe(
     army,
     readonlyArray.filterMap(shootOption),
-    readonlyArray.size,
+    readonlyArray.size
   ),
 });

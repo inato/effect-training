@@ -1,9 +1,9 @@
 // `fp-ts` training Exercise 4
 // Dependency injection with `Reader`
 
-import { reader } from 'fp-ts';
-import { flow, pipe } from 'fp-ts/function';
-import { Reader } from 'fp-ts/Reader';
+import { reader } from "effect";
+import { flow, pipe } from "effect/function";
+import { Reader } from "effect/Reader";
 
 // Sometimes, a function can have a huge amount of dependencies (services,
 // repositories, ...) and it is often impractical (not to say truly annoying)
@@ -21,9 +21,9 @@ import { Reader } from 'fp-ts/Reader';
 // Let's consider a small range of countries (here, France, Spain and the USA):
 
 export enum Country {
-  France = 'France',
-  Spain = 'Spain',
-  USA = 'USA',
+  France = "France",
+  Spain = "Spain",
+  USA = "USA",
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -47,7 +47,7 @@ export enum Country {
 export const exclamation = (sentence: string): Reader<Country, string> =>
   pipe(
     reader.ask<Country>(),
-    reader.map(country => {
+    reader.map((country) => {
       switch (country) {
         case Country.France:
           return `${sentence} !`;
@@ -58,7 +58,7 @@ export const exclamation = (sentence: string): Reader<Country, string> =>
         case Country.USA:
           return `${sentence}!`;
       }
-    }),
+    })
   );
 
 // Obviously, different countries often mean different languages and so
@@ -67,11 +67,11 @@ export const exclamation = (sentence: string): Reader<Country, string> =>
 export const sayHello = (country: Country): string => {
   switch (country) {
     case Country.France:
-      return 'Bonjour';
+      return "Bonjour";
     case Country.Spain:
-      return 'Buenos dìas';
+      return "Buenos dìas";
     case Country.USA:
-      return 'Hello';
+      return "Hello";
   }
 };
 
@@ -87,7 +87,7 @@ export const sayHello = (country: Country): string => {
 export const greet = (name: string): Reader<Country, string> =>
   pipe(
     sayHello,
-    reader.map(greeting => `${greeting}, ${name}`),
+    reader.map((greeting) => `${greeting}, ${name}`)
   );
 
 // Finally, we are going to compose multiple `Reader`s together.

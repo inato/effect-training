@@ -1,9 +1,9 @@
 // `fp-ts` training Exercise 3
 // Sort things out with `Ord`
 
-import { readonlyArray, string, number, option, ord } from 'fp-ts';
-import { pipe } from 'fp-ts/function';
-import { Option } from 'fp-ts/Option';
+import { readonlyArray, string, number, option, ord } from "effect";
+import { pipe } from "effect/function";
+import { Option } from "effect/Option";
 
 // Have you ever looked at the methods provided by `fp-ts` own `Array` and
 // `ReadonlyArray` modules? They expose a load of functions to manipulate
@@ -53,7 +53,7 @@ export const sortNumbers = readonlyArray.sort(number.Ord);
 // HINT: Any ordering can be reversed with a simple function `ord.reverse`.
 
 export const sortNumbersDescending = readonlyArray.sort(
-  ord.reverse(number.Ord),
+  ord.reverse(number.Ord)
 );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -71,7 +71,7 @@ export const sortNumbersDescending = readonlyArray.sort(
 // to take a look at `option.getOrd`.
 
 export const sortOptionalNumbers = readonlyArray.sort(
-  option.getOrd(number.Ord),
+  option.getOrd(number.Ord)
 );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -98,7 +98,7 @@ export interface Person {
 
 const byName = pipe(
   string.Ord,
-  ord.contramap((person: Person) => person.name),
+  ord.contramap((person: Person) => person.name)
 );
 
 export const sortPersonsByName = readonlyArray.sort(byName);
@@ -106,7 +106,7 @@ export const sortPersonsByName = readonlyArray.sort(byName);
 const byAge = pipe(
   number.Ord,
   option.getOrd,
-  ord.contramap((person: Person) => person.age),
+  ord.contramap((person: Person) => person.age)
 );
 
 export const sortPersonsByAge = readonlyArray.sort(byAge);
@@ -123,7 +123,7 @@ export const sortPersonsByAge = readonlyArray.sort(byAge);
 // Below is the full low-level method. Easier to just use `sortBy`
 //
 // ```ts
-// import { monoid } from 'fp-ts';
+// import { monoid } from 'effect';
 //
 // const byAgeThenByName = monoid.concatAll(ord.getMonoid<Person>())([
 //   byAge,

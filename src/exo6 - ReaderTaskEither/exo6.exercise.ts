@@ -1,10 +1,10 @@
 // `fp-ts` training Exercise 6
 // Introduction to `ReaderTaskEither`
 
-import { ReaderTaskEither } from 'fp-ts/lib/ReaderTaskEither';
-import { unimplemented } from '../utils';
-import { Application } from './application';
-import { User } from './domain';
+import { ReaderTaskEither } from "effect/lib/ReaderTaskEither";
+import { unimplemented } from "../utils";
+import { Application } from "./application";
+import { User } from "./domain";
 
 // In real world applications you will mostly manipulate `ReaderTaskEither` aka
 // `rte` in the use-cases of the application.

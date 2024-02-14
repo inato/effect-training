@@ -8,8 +8,8 @@ import {
   readonlySet,
   semigroup,
   string,
-} from 'fp-ts';
-import { pipe } from 'fp-ts/function';
+} from "effect";
+import { pipe } from "effect/function";
 
 // In this exercise, we will learn how to manipulate essential collections
 // such as `Set` and `Map`.
@@ -51,7 +51,7 @@ export const numberArray: ReadonlyArray<number> = [7, 42, 1337, 1, 0, 1337, 42];
 
 export const numberSet: ReadonlySet<number> = pipe(
   numberArray,
-  readonlySet.fromReadonlyArray(number.Eq),
+  readonlySet.fromReadonlyArray(number.Eq)
 );
 
 // Convert `numberSet` back to an array in `numberArrayFromSet`.
@@ -70,7 +70,7 @@ export const numberSet: ReadonlySet<number> = pipe(
 
 export const numberArrayFromSet: ReadonlyArray<number> = pipe(
   numberSet,
-  readonlySet.toReadonlyArray(number.Ord),
+  readonlySet.toReadonlyArray(number.Ord)
 );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -87,11 +87,11 @@ export const numberArrayFromSet: ReadonlyArray<number> = pipe(
 // numbers, etc...)
 
 export const associativeArray: ReadonlyArray<[number, string]> = [
-  [1, 'Alice'],
-  [2, 'Bob'],
-  [3, 'Clara'],
-  [4, 'Denise'],
-  [2, 'Robert'],
+  [1, "Alice"],
+  [2, "Bob"],
+  [3, "Clara"],
+  [4, "Denise"],
+  [2, "Robert"],
 ];
 
 // Construct `mapWithLastEntry` from the provided `associativeArray`.
@@ -117,7 +117,7 @@ export const associativeArray: ReadonlyArray<[number, string]> = [
 
 export const mapWithLastEntry: ReadonlyMap<number, string> = pipe(
   associativeArray,
-  readonlyMap.fromFoldable(number.Eq, semigroup.last(), readonlyArray.Foldable),
+  readonlyMap.fromFoldable(number.Eq, semigroup.last(), readonlyArray.Foldable)
 );
 
 // Same thing as above, except that upon key collision we don't want to simply
@@ -140,7 +140,7 @@ export const mapWithLastEntry: ReadonlyMap<number, string> = pipe(
 
 export const mapWithConcatenatedEntries: ReadonlyMap<number, string> = pipe(
   associativeArray,
-  readonlyMap.fromFoldable(number.Eq, string.Semigroup, readonlyArray.Foldable),
+  readonlyMap.fromFoldable(number.Eq, string.Semigroup, readonlyArray.Foldable)
 );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -157,14 +157,14 @@ export const odds = new Set([1, 3, 5, 7, 9]);
 // - Be mindful of the order of operands for the operator you will choose.
 
 export const nonPrimeOdds: ReadonlySet<number> = readonlySet.difference(
-  number.Eq,
+  number.Eq
 )(odds, primes);
 
 // Construct the set `primeOdds` from the two sets defined above. It should
 // only include the odd numbers that are also prime.
 
 export const primeOdds: ReadonlySet<number> = readonlySet.intersection(
-  number.Eq,
+  number.Eq
 )(odds, primes);
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -182,18 +182,18 @@ export type Analytics = {
 
 export const pageViewsA = new Map(
   [
-    { page: 'home', views: 5 },
-    { page: 'about', views: 2 },
-    { page: 'blog', views: 7 },
-  ].map(entry => [entry.page, entry]),
+    { page: "home", views: 5 },
+    { page: "about", views: 2 },
+    { page: "blog", views: 7 },
+  ].map((entry) => [entry.page, entry])
 );
 
 export const pageViewsB = new Map(
   [
-    { page: 'home', views: 10 },
-    { page: 'blog', views: 35 },
-    { page: 'faq', views: 5 },
-  ].map(entry => [entry.page, entry]),
+    { page: "home", views: 10 },
+    { page: "blog", views: 35 },
+    { page: "faq", views: 5 },
+  ].map((entry) => [entry.page, entry])
 );
 
 // Construct the `Map` with the total page views for all the pages in both sources
@@ -208,7 +208,7 @@ const S = semigroup.struct<Analytics>({
 
 export const allPageViews: ReadonlyMap<string, Analytics> = pipe(
   pageViewsA,
-  readonlyMap.union(string.Eq, S)(pageViewsB),
+  readonlyMap.union(string.Eq, S)(pageViewsB)
 );
 
 // Construct the `Map` with the total page views but only for the pages that
@@ -216,5 +216,5 @@ export const allPageViews: ReadonlyMap<string, Analytics> = pipe(
 
 export const intersectionPageViews: ReadonlyMap<string, Analytics> = pipe(
   pageViewsA,
-  readonlyMap.intersection(string.Eq, S)(pageViewsB),
+  readonlyMap.intersection(string.Eq, S)(pageViewsB)
 );

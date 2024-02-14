@@ -1,9 +1,9 @@
 // `fp-ts` training Exercise 4
 // Dependency injection with `Reader`
 
-import { Reader } from 'fp-ts/Reader';
+import { Reader } from "effect/Reader";
 
-import { unimplemented } from '../utils';
+import { unimplemented } from "../utils";
 
 // Sometimes, a function can have a huge amount of dependencies (services,
 // repositories, ...) and it is often impractical (not to say truly annoying)
@@ -21,9 +21,9 @@ import { unimplemented } from '../utils';
 // Let's consider a small range of countries (here, France, Spain and the USA):
 
 export enum Country {
-  France = 'France',
-  Spain = 'Spain',
-  USA = 'USA',
+  France = "France",
+  Spain = "Spain",
+  USA = "USA",
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -53,11 +53,11 @@ export const exclamation: (sentence: string) => Reader<Country, string> =
 export const sayHello = (country: Country): string => {
   switch (country) {
     case Country.France:
-      return 'Bonjour';
+      return "Bonjour";
     case Country.Spain:
-      return 'Buenos dìas';
+      return "Buenos dìas";
     case Country.USA:
-      return 'Hello';
+      return "Hello";
   }
 };
 

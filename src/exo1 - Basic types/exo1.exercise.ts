@@ -4,10 +4,8 @@
 // - Either
 // - TaskEither
 
-import { Either } from 'fp-ts/Either';
-import { Option } from 'fp-ts/Option';
-import { TaskEither } from 'fp-ts/TaskEither';
-import { unimplemented, sleep, unimplementedAsync } from '../utils';
+import { unimplemented, sleep } from "../utils";
+import { Effect, type Either, type Option } from "effect";
 
 export const divide = (a: number, b: number): number => {
   return a / b;
@@ -24,7 +22,7 @@ export const divide = (a: number, b: number): number => {
 // - `option.some(value)`
 // - `option.none`
 
-export const safeDivide: (a: number, b: number) => Option<number> =
+export const safeDivide: (a: number, b: number) => Option.Option<number> =
   unimplemented;
 
 // You probably wrote `safeDivide` using `if` statements, and it's perfectly valid!
@@ -52,13 +50,13 @@ export const safeDivide: (a: number, b: number) => Option<number> =
 // - `either.fromOption(() => leftValue)(option)`
 
 // Here is a simple error type to help you:
-export type DivisionByZeroError = 'Error: Division by zero';
-export const DivisionByZero = 'Error: Division by zero' as const;
+export type DivisionByZeroError = "Error: Division by zero";
+export const DivisionByZero = "Error: Division by zero" as const;
 
 export const safeDivideWithError: (
   a: number,
-  b: number,
-) => Either<DivisionByZeroError, number> = unimplemented;
+  b: number
+) => Either.Either<DivisionByZeroError, number> = unimplemented;
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                TASKEITHER                                 //
@@ -70,7 +68,7 @@ export const asyncDivide = async (a: number, b: number) => {
   await sleep(1000);
 
   if (b === 0) {
-    throw new Error('BOOM!');
+    throw new Error("BOOM!");
   }
 
   return a / b;
@@ -85,5 +83,5 @@ export const asyncDivide = async (a: number, b: number) => {
 
 export const asyncSafeDivideWithError: (
   a: number,
-  b: number,
-) => TaskEither<DivisionByZeroError, number> = unimplementedAsync;
+  b: number
+) => Effect.Effect<number, DivisionByZeroError> = Effect.die;

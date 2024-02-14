@@ -1,7 +1,7 @@
-import { either, option } from 'fp-ts';
-import * as exercise from './exo2.exercise';
-import * as solution from './exo2.solution';
-import { isTestingSolution } from '../testUtils';
+import { either, option } from "effect";
+import * as exercise from "./exo2.exercise";
+import * as solution from "./exo2.solution";
+import { isTestingSolution } from "../testUtils";
 
 const {
   Warrior,
@@ -19,28 +19,28 @@ const {
   attack,
 } = isTestingSolution() ? solution : exercise;
 
-describe('exo2', () => {
-  describe('checkAttackerAndSmash', () => {
-    it('should return a NoAttacker error if no attacker is selected', () => {
+describe("exo2", () => {
+  describe("checkAttackerAndSmash", () => {
+    it("should return a NoAttacker error if no attacker is selected", () => {
       const result = checkAttackerAndSmash(option.none);
       const expected = either.left(
-        noAttackerFailure('No attacker currently selected'),
+        noAttackerFailure("No attacker currently selected")
       );
 
       expect(result).toStrictEqual(expected);
     });
 
-    it('should return an InvalidAttacker error if the wrong attacker is selected', () => {
+    it("should return an InvalidAttacker error if the wrong attacker is selected", () => {
       const archer = new Archer();
       const resultArcher = checkAttackerAndSmash(option.some(archer));
       const expectedArcher = either.left(
-        invalidAttackerFailure('Archer cannot perform smash'),
+        invalidAttackerFailure("Archer cannot perform smash")
       );
 
       const wizard = new Wizard();
       const resultWizard = checkAttackerAndSmash(option.some(wizard));
       const expectedWizard = either.left(
-        invalidAttackerFailure('Wizard cannot perform smash'),
+        invalidAttackerFailure("Wizard cannot perform smash")
       );
 
       expect(resultArcher).toStrictEqual(expectedArcher);
@@ -48,7 +48,7 @@ describe('exo2', () => {
       expect(resultWizard).toStrictEqual(expectedWizard);
     });
 
-    it('should return the proper type of damage', () => {
+    it("should return the proper type of damage", () => {
       const warrior = new Warrior();
       const result = checkAttackerAndSmash(option.some(warrior));
       const expected = either.right(Damage.Physical);
@@ -57,27 +57,27 @@ describe('exo2', () => {
     });
   });
 
-  describe('checkAttackerAndBurn', () => {
-    it('should return a NoAttacker error if no attacker is selected', () => {
+  describe("checkAttackerAndBurn", () => {
+    it("should return a NoAttacker error if no attacker is selected", () => {
       const result = checkAttackerAndBurn(option.none);
       const expected = either.left(
-        noAttackerFailure('No attacker currently selected'),
+        noAttackerFailure("No attacker currently selected")
       );
 
       expect(result).toStrictEqual(expected);
     });
 
-    it('should return an InvalidAttacker error if the wrong attacker is selected', () => {
+    it("should return an InvalidAttacker error if the wrong attacker is selected", () => {
       const warrior = new Warrior();
       const resultWarrior = checkAttackerAndBurn(option.some(warrior));
       const expectedWarrior = either.left(
-        invalidAttackerFailure('Warrior cannot perform burn'),
+        invalidAttackerFailure("Warrior cannot perform burn")
       );
 
       const archer = new Archer();
       const resultArcher = checkAttackerAndBurn(option.some(archer));
       const expectedArcher = either.left(
-        invalidAttackerFailure('Archer cannot perform burn'),
+        invalidAttackerFailure("Archer cannot perform burn")
       );
 
       expect(resultWarrior).toStrictEqual(expectedWarrior);
@@ -85,7 +85,7 @@ describe('exo2', () => {
       expect(resultArcher).toStrictEqual(expectedArcher);
     });
 
-    it('should return the proper type of damage', () => {
+    it("should return the proper type of damage", () => {
       const wizard = new Wizard();
       const result = checkAttackerAndBurn(option.some(wizard));
       const expected = either.right(Damage.Magical);
@@ -94,27 +94,27 @@ describe('exo2', () => {
     });
   });
 
-  describe('checkAttackerAndShoot', () => {
-    it('should return a NoAttacker error if no attacker is selected', () => {
+  describe("checkAttackerAndShoot", () => {
+    it("should return a NoAttacker error if no attacker is selected", () => {
       const result = checkAttackerAndShoot(option.none);
       const expected = either.left(
-        noAttackerFailure('No attacker currently selected'),
+        noAttackerFailure("No attacker currently selected")
       );
 
       expect(result).toStrictEqual(expected);
     });
 
-    it('should return an InvalidAttacker error if the wrong attacker is selected', () => {
+    it("should return an InvalidAttacker error if the wrong attacker is selected", () => {
       const warrior = new Warrior();
       const resultWarrior = checkAttackerAndShoot(option.some(warrior));
       const expectedWarrior = either.left(
-        invalidAttackerFailure('Warrior cannot perform shoot'),
+        invalidAttackerFailure("Warrior cannot perform shoot")
       );
 
       const wizard = new Wizard();
       const resultWizard = checkAttackerAndShoot(option.some(wizard));
       const expectedWizard = either.left(
-        invalidAttackerFailure('Wizard cannot perform shoot'),
+        invalidAttackerFailure("Wizard cannot perform shoot")
       );
 
       expect(resultWarrior).toStrictEqual(expectedWarrior);
@@ -122,7 +122,7 @@ describe('exo2', () => {
       expect(resultWizard).toStrictEqual(expectedWizard);
     });
 
-    it('should return the proper type of damage', () => {
+    it("should return the proper type of damage", () => {
       const archer = new Archer();
       const result = checkAttackerAndShoot(option.some(archer));
       const expected = either.right(Damage.Ranged);
@@ -131,8 +131,8 @@ describe('exo2', () => {
     });
   });
 
-  describe('smashOption', () => {
-    it('should return option.none if the character is of the wrong type', () => {
+  describe("smashOption", () => {
+    it("should return option.none if the character is of the wrong type", () => {
       const wizard = new Wizard();
       const archer = new Archer();
 
@@ -145,7 +145,7 @@ describe('exo2', () => {
       expect(resultArcher).toStrictEqual(expected);
     });
 
-    it('should return option.some(Damage.Physical) if the character is a warrior', () => {
+    it("should return option.some(Damage.Physical) if the character is a warrior", () => {
       const warrior = new Warrior();
 
       const result = smashOption(warrior);
@@ -155,8 +155,8 @@ describe('exo2', () => {
     });
   });
 
-  describe('burnOption', () => {
-    it('should return option.none if the character is of the wrong type', () => {
+  describe("burnOption", () => {
+    it("should return option.none if the character is of the wrong type", () => {
       const warrior = new Warrior();
       const archer = new Archer();
 
@@ -169,7 +169,7 @@ describe('exo2', () => {
       expect(resultArcher).toStrictEqual(expected);
     });
 
-    it('should return option.some(Damage.Magical) if the character is a wizard', () => {
+    it("should return option.some(Damage.Magical) if the character is a wizard", () => {
       const wizard = new Wizard();
 
       const result = burnOption(wizard);
@@ -179,8 +179,8 @@ describe('exo2', () => {
     });
   });
 
-  describe('shootOption', () => {
-    it('should return option.none if the character is of the wrong type', () => {
+  describe("shootOption", () => {
+    it("should return option.none if the character is of the wrong type", () => {
       const warrior = new Warrior();
       const wizard = new Wizard();
 
@@ -193,7 +193,7 @@ describe('exo2', () => {
       expect(resultWizard).toStrictEqual(expected);
     });
 
-    it('should return option.some(Damage.Ranged) if the character is an archer', () => {
+    it("should return option.some(Damage.Ranged) if the character is an archer", () => {
       const archer = new Archer();
 
       const result = shootOption(archer);
@@ -203,8 +203,8 @@ describe('exo2', () => {
     });
   });
 
-  describe('attack', () => {
-    it('should return the correct number of each type of attacks', () => {
+  describe("attack", () => {
+    it("should return the correct number of each type of attacks", () => {
       const warrior = new Warrior();
       const wizard = new Wizard();
       const archer = new Archer();

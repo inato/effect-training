@@ -1,8 +1,8 @@
 // `fp-ts` training Exercise 3
 // Sort things out with `Ord`
 
-import { Option } from 'fp-ts/Option';
-import { unimplemented } from '../utils';
+import { Option } from "effect/Option";
+import { unimplemented } from "../utils";
 
 // Have you ever looked at the methods provided by `fp-ts` own `Array` and
 // `ReadonlyArray` modules? They expose a load of functions to manipulate
@@ -35,11 +35,11 @@ import { unimplemented } from '../utils';
 // `string.Ord: Ord<string>` or `number.Ord: Ord<number>`.
 
 export const sortStrings: (
-  strings: ReadonlyArray<string>,
+  strings: ReadonlyArray<string>
 ) => ReadonlyArray<string> = unimplemented;
 
 export const sortNumbers: (
-  numbers: ReadonlyArray<number>,
+  numbers: ReadonlyArray<number>
 ) => ReadonlyArray<number> = unimplemented;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -56,7 +56,7 @@ export const sortNumbers: (
 // HINT: Any ordering can be reversed with a simple function `ord.reverse`.
 
 export const sortNumbersDescending: (
-  numbers: ReadonlyArray<number>,
+  numbers: ReadonlyArray<number>
 ) => ReadonlyArray<number> = unimplemented;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -74,7 +74,7 @@ export const sortNumbersDescending: (
 // to take a look at `option.getOrd`.
 
 export const sortOptionalNumbers: (
-  optionalNumbers: ReadonlyArray<Option<number>>,
+  optionalNumbers: ReadonlyArray<Option<number>>
 ) => ReadonlyArray<Option<number>> = unimplemented;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -100,11 +100,11 @@ export interface Person {
 }
 
 export const sortPersonsByName: (
-  persons: ReadonlyArray<Person>,
+  persons: ReadonlyArray<Person>
 ) => ReadonlyArray<Person> = unimplemented;
 
 export const sortPersonsByAge: (
-  persons: ReadonlyArray<Person>,
+  persons: ReadonlyArray<Person>
 ) => ReadonlyArray<Person> = unimplemented;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -117,5 +117,5 @@ export const sortPersonsByAge: (
 // HINT: Take a look at `readonlyArray.sortBy`
 
 export const sortPersonsByAgeThenByName: (
-  persons: ReadonlyArray<Person>,
+  persons: ReadonlyArray<Person>
 ) => ReadonlyArray<Person> = unimplemented;

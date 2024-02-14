@@ -1,7 +1,7 @@
-import { option } from 'fp-ts';
-import * as exercise from './exo3.exercise';
-import * as solution from './exo3.solution';
-import { isTestingSolution } from '../testUtils';
+import { option } from "effect";
+import * as exercise from "./exo3.exercise";
+import * as solution from "./exo3.solution";
+import { isTestingSolution } from "../testUtils";
 
 const {
   sortStrings,
@@ -13,20 +13,20 @@ const {
   sortPersonsByAgeThenByName,
 } = isTestingSolution() ? solution : exercise;
 
-describe('exo3', () => {
-  describe('sortStrings', () => {
-    it('should return an alphabetically sorted array of strings', () => {
-      const strings = ['xyz', 'aba', 'ori', 'aab', 'ghl'];
+describe("exo3", () => {
+  describe("sortStrings", () => {
+    it("should return an alphabetically sorted array of strings", () => {
+      const strings = ["xyz", "aba", "ori", "aab", "ghl"];
 
       const result = sortStrings(strings);
-      const expected = ['aab', 'aba', 'ghl', 'ori', 'xyz'];
+      const expected = ["aab", "aba", "ghl", "ori", "xyz"];
 
       expect(result).toStrictEqual(expected);
     });
   });
 
-  describe('sortNumbers', () => {
-    it('should return a sorted array of numbers', () => {
+  describe("sortNumbers", () => {
+    it("should return a sorted array of numbers", () => {
       const numbers = [1337, 42, 5701];
 
       const result = sortNumbers(numbers);
@@ -36,8 +36,8 @@ describe('exo3', () => {
     });
   });
 
-  describe('sortNumbersDescending', () => {
-    it('should return a sorted array of descending numbers', () => {
+  describe("sortNumbersDescending", () => {
+    it("should return a sorted array of descending numbers", () => {
       const numbers = [1337, 42, 5701];
 
       const result = sortNumbersDescending(numbers);
@@ -47,8 +47,8 @@ describe('exo3', () => {
     });
   });
 
-  describe('sortOptionalNumbers', () => {
-    it('should return a sorted array of optional numbers', () => {
+  describe("sortOptionalNumbers", () => {
+    it("should return a sorted array of optional numbers", () => {
       const optionalNumbers = [option.some(1337), option.none, option.some(42)];
 
       const result = sortOptionalNumbers(optionalNumbers);
@@ -58,11 +58,11 @@ describe('exo3', () => {
     });
   });
 
-  describe('sortPersonsByName', () => {
-    it('should return an array of persons alphabetically sorted by their name', () => {
-      const alice = { name: 'Alice', age: option.none };
-      const bob = { name: 'Bob', age: option.none };
-      const crystal = { name: 'Crystal', age: option.none };
+  describe("sortPersonsByName", () => {
+    it("should return an array of persons alphabetically sorted by their name", () => {
+      const alice = { name: "Alice", age: option.none };
+      const bob = { name: "Bob", age: option.none };
+      const crystal = { name: "Crystal", age: option.none };
 
       const persons = [crystal, alice, bob];
 
@@ -73,11 +73,11 @@ describe('exo3', () => {
     });
   });
 
-  describe('sortPersonsByName', () => {
-    it('should return an array of persons sorted by their age', () => {
-      const alice = { name: 'Alice', age: option.some(42) };
-      const bob = { name: 'Bob', age: option.none };
-      const crystal = { name: 'Crystal', age: option.some(29) };
+  describe("sortPersonsByName", () => {
+    it("should return an array of persons sorted by their age", () => {
+      const alice = { name: "Alice", age: option.some(42) };
+      const bob = { name: "Bob", age: option.none };
+      const crystal = { name: "Crystal", age: option.some(29) };
 
       const persons = [crystal, alice, bob];
 
@@ -88,13 +88,13 @@ describe('exo3', () => {
     });
   });
 
-  describe('sortPersonsByName', () => {
-    it('should return an array of persons sorted first by age and then by name', () => {
-      const alice = { name: 'Alice', age: option.some(42) };
-      const bob = { name: 'Bob', age: option.none };
-      const crystal = { name: 'Crystal', age: option.some(29) };
-      const dorian = { name: 'Dorian', age: option.some(29) };
-      const edgar = { name: 'Edgar', age: option.none };
+  describe("sortPersonsByName", () => {
+    it("should return an array of persons sorted first by age and then by name", () => {
+      const alice = { name: "Alice", age: option.some(42) };
+      const bob = { name: "Bob", age: option.none };
+      const crystal = { name: "Crystal", age: option.some(29) };
+      const dorian = { name: "Dorian", age: option.some(29) };
+      const edgar = { name: "Edgar", age: option.none };
 
       const persons = [dorian, alice, edgar, bob, crystal];
 

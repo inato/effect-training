@@ -1,10 +1,8 @@
 // `fp-ts` training Exercise 2
 // Let's have fun with combinators!
 
-import { Either } from 'fp-ts/Either';
-import { Option } from 'fp-ts/Option';
-import { Failure } from '../Failure';
-import { unimplemented } from '../utils';
+import { Effect, type Either, type Option } from "effect";
+import { unimplemented } from "../utils";
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                   SETUP                                   //
@@ -20,9 +18,9 @@ export type Character = Warrior | Wizard | Archer;
 
 // We have three types of `Damage`, each corresponding to a character type.
 export enum Damage {
-  Physical = 'Physical damage',
-  Magical = 'Magical damage',
-  Ranged = 'Ranged damage',
+  Physical = "Physical damage",
+  Magical = "Magical damage",
+  Ranged = "Ranged damage",
 }
 
 // A `Warrior` only can output physical damage.
@@ -32,7 +30,7 @@ export class Warrior {
   }
 
   toString() {
-    return 'Warrior';
+    return "Warrior";
   }
 }
 
@@ -43,7 +41,7 @@ export class Wizard {
   }
 
   toString() {
-    return 'Wizard';
+    return "Wizard";
   }
 }
 
@@ -54,7 +52,7 @@ export class Archer {
   }
 
   toString() {
-    return 'Archer';
+    return "Archer";
   }
 }
 
@@ -79,8 +77,8 @@ export const isArcher = (character: Character): character is Archer => {
 // - the player can try to perform the wrong action for a character class
 
 export enum Exo2FailureType {
-  NoAttacker = 'Exo2FailureType_NoAttacker',
-  InvalidAttacker = 'Exo2FailureType_InvalidAttacker',
+  NoAttacker = "Exo2FailureType_NoAttacker",
+  InvalidAttacker = "Exo2FailureType_InvalidAttacker",
 }
 
 export type NoAttackerFailure = Failure<Exo2FailureType.NoAttacker>;
@@ -88,14 +86,14 @@ export const noAttackerFailure = Failure.builder(Exo2FailureType.NoAttacker);
 
 export type InvalidAttackerFailure = Failure<Exo2FailureType.InvalidAttacker>;
 export const invalidAttackerFailure = Failure.builder(
-  Exo2FailureType.InvalidAttacker,
+  Exo2FailureType.InvalidAttacker
 );
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                  EITHER                                   //
 ///////////////////////////////////////////////////////////////////////////////
 
-// The next three functions take the character currently selected by the player as the attacker 
+// The next three functions take the character currently selected by the player as the attacker
 // and return the expected damage type if appropriate.
 //
 // If no attacker is selected, it should return
@@ -118,15 +116,15 @@ export const invalidAttackerFailure = Failure.builder(
 // the `flatMap` operator.
 
 export const checkAttackerAndSmash: (
-  attacker: Option<Character>,
+  attacker: Option<Character>
 ) => Either<NoAttackerFailure | InvalidAttackerFailure, Damage> = unimplemented;
 
 export const checkAttackerAndBurn: (
-  attacker: Option<Character>,
+  attacker: Option<Character>
 ) => Either<NoAttackerFailure | InvalidAttackerFailure, Damage> = unimplemented;
 
 export const checkAttackerAndShoot: (
-  attacker: Option<Character>,
+  attacker: Option<Character>
 ) => Either<NoAttackerFailure | InvalidAttackerFailure, Damage> = unimplemented;
 
 ///////////////////////////////////////////////////////////////////////////////

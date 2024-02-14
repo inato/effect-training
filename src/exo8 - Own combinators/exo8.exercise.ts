@@ -1,9 +1,9 @@
 // `fp-ts` training Exercise 8
 // Define your own combinators
 
-import { Either } from 'fp-ts/Either';
-import { ReaderTaskEither } from 'fp-ts/ReaderTaskEither';
-import { unimplemented } from '../utils';
+import { Either } from "effect/Either";
+import { ReaderTaskEither } from "effect/ReaderTaskEither";
+import { unimplemented } from "../utils";
 
 // Technically, a combinator is a pure function with no free variables in it,
 // i.e. one that does not depend on any variable from its enclosing scope.
@@ -72,9 +72,9 @@ const unimplementedApSCombinator = (_name: any, _thing: any) => unimplemented;
 
 export const bindEitherK: <N extends string, A, E, B>(
   name: Exclude<N, keyof A>,
-  f: (a: A) => Either<E, B>,
+  f: (a: A) => Either<E, B>
 ) => <R>(
-  ma: ReaderTaskEither<R, E, A>,
+  ma: ReaderTaskEither<R, E, A>
 ) => ReaderTaskEither<
   R,
   E,

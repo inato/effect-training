@@ -1,10 +1,10 @@
 // `fp-ts` training Exercise 6
 // Introduction to `ReaderTaskEither`
 
-import { readerTaskEither as rte } from 'fp-ts';
-import { pipe } from 'fp-ts/function';
-import { Application } from './application';
-import { User } from './domain';
+import { readerTaskEither as rte } from "effect";
+import { pipe } from "effect/function";
+import { Application } from "./application";
+import { User } from "./domain";
 
 // In real world applications you will mostly manipulate `ReaderTaskEither` aka
 // `rte` in the use-cases of the application.
@@ -29,7 +29,7 @@ const capitalize = (str: string) =>
 export const getCapitalizedUserName = ({ userId }: { userId: string }) =>
   pipe(
     User.Repository.getById(userId),
-    rte.map(({ name }) => capitalize(name)),
+    rte.map(({ name }) => capitalize(name))
   );
 
 // Sometimes you will need to get multiple data points before performing an operation
@@ -56,17 +56,17 @@ export const getConcatenationOfTheTwoUserNames = ({
   pipe(
     rte.Do,
     rte.apS(
-      'userOneCapitalizedName',
-      getCapitalizedUserName({ userId: userIdOne }),
+      "userOneCapitalizedName",
+      getCapitalizedUserName({ userId: userIdOne })
     ),
     rte.apS(
-      'userTwoCapitalizedName',
-      getCapitalizedUserName({ userId: userIdTwo }),
+      "userTwoCapitalizedName",
+      getCapitalizedUserName({ userId: userIdTwo })
     ),
     rte.map(
       ({ userOneCapitalizedName, userTwoCapitalizedName }) =>
-        userOneCapitalizedName + userTwoCapitalizedName,
-    ),
+        userOneCapitalizedName + userTwoCapitalizedName
+    )
   );
 
 // There is an alternative way of writing the previous function without the
@@ -89,7 +89,7 @@ export const getConcatenationOfTheTwoUserNamesUsingAp = ({
   pipe(
     rte.of((x: string) => (y: string) => `${x}${y}`),
     rte.ap(getCapitalizedUserName({ userId: userIdOne })),
-    rte.ap(getCapitalizedUserName({ userId: userIdTwo })),
+    rte.ap(getCapitalizedUserName({ userId: userIdTwo }))
   );
 
 // Sometimes, you will need to feed the current context with data that you can
@@ -108,14 +108,14 @@ export const getConcatenationOfTheBestFriendNameAndUserName = ({
 }) =>
   pipe(
     rte.Do,
-    rte.apS('userOne', User.Repository.getById(userIdOne)),
-    rte.bind('userTwo', ({ userOne }) =>
-      User.Repository.getById(userOne.bestFriendId),
+    rte.apS("userOne", User.Repository.getById(userIdOne)),
+    rte.bind("userTwo", ({ userOne }) =>
+      User.Repository.getById(userOne.bestFriendId)
     ),
     rte.map(
       ({ userOne, userTwo }) =>
-        `${capitalize(userOne.name)}${capitalize(userTwo.name)}`,
-    ),
+        `${capitalize(userOne.name)}${capitalize(userTwo.name)}`
+    )
   );
 
 // Most of the time, you will need to use several external services.
@@ -128,7 +128,7 @@ export const getConcatenationOfUserNameAndCurrentYear = ({
 }) =>
   pipe(
     rte.Do,
-    rte.apS('user', User.Repository.getById(userIdOne)),
-    rte.apSW('year', rte.fromReader(Application.TimeService.thisYear())),
-    rte.map(({ user, year }) => `${user.name}${year}`),
+    rte.apS("user", User.Repository.getById(userIdOne)),
+    rte.apSW("year", rte.fromReader(Application.TimeService.thisYear())),
+    rte.map(({ user, year }) => `${user.name}${year}`)
   );

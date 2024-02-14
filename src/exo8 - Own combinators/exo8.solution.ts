@@ -1,10 +1,10 @@
 // `fp-ts` training Exercise 8
 // Define your own combinators
 
-import { Either } from 'fp-ts/Either';
-import { Reader } from 'fp-ts/Reader';
-import { ReaderTaskEither } from 'fp-ts/ReaderTaskEither';
-import { readerTaskEither as rte } from 'fp-ts';
+import { Either } from "effect/Either";
+import { Reader } from "effect/Reader";
+import { ReaderTaskEither } from "effect/ReaderTaskEither";
+import { readerTaskEither as rte } from "effect";
 
 // Technically, a combinator is a pure function with no free variables in it,
 // i.e. one that does not depend on any variable from its enclosing scope.
@@ -69,28 +69,28 @@ import { readerTaskEither as rte } from 'fp-ts';
 
 export const bindEitherK: <N extends string, A, E, B>(
   name: Exclude<N, keyof A>,
-  f: (a: A) => Either<E, B>,
+  f: (a: A) => Either<E, B>
 ) => <R>(
-  ma: ReaderTaskEither<R, E, A>,
+  ma: ReaderTaskEither<R, E, A>
 ) => ReaderTaskEither<
   R,
   E,
   { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }
-> = (name, f) => rte.bind(name, a => rte.fromEither(f(a)));
+> = (name, f) => rte.bind(name, (a) => rte.fromEither(f(a)));
 
 // Write the implementation and type definition of `bindEitherKW`, the
 // "Widened" version of `bindEitherK`.
 
 export const bindEitherKW: <N extends string, A, E2, B>(
   name: Exclude<N, keyof A>,
-  f: (a: A) => Either<E2, B>,
+  f: (a: A) => Either<E2, B>
 ) => <R, E1>(
-  ma: ReaderTaskEither<R, E1, A>,
+  ma: ReaderTaskEither<R, E1, A>
 ) => ReaderTaskEither<
   R,
   E1 | E2,
   { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }
-> = (name, f) => rte.bindW(name, a => rte.fromEither(f(a)));
+> = (name, f) => rte.bindW(name, (a) => rte.fromEither(f(a)));
 
 // Write the implementations and type definitions of `apSEitherK` and
 // `apSEitherKW`.
@@ -101,9 +101,9 @@ export const bindEitherKW: <N extends string, A, E2, B>(
 
 export const apSEitherK: <N extends string, A, E, B>(
   name: Exclude<N, keyof A>,
-  mb: Either<E, B>,
+  mb: Either<E, B>
 ) => <R>(
-  ma: ReaderTaskEither<R, E, A>,
+  ma: ReaderTaskEither<R, E, A>
 ) => ReaderTaskEither<
   R,
   E,
@@ -112,9 +112,9 @@ export const apSEitherK: <N extends string, A, E, B>(
 
 export const apSEitherKW: <N extends string, A, E2, B>(
   name: Exclude<N, keyof A>,
-  mb: Either<E2, B>,
+  mb: Either<E2, B>
 ) => <R, E1>(
-  ma: ReaderTaskEither<R, E1, A>,
+  ma: ReaderTaskEither<R, E1, A>
 ) => ReaderTaskEither<
   R,
   E1 | E2,
@@ -130,22 +130,22 @@ export const apSEitherKW: <N extends string, A, E2, B>(
 
 export const bindReaderK: <N extends string, A, R, B>(
   name: Exclude<N, keyof A>,
-  f: (a: A) => Reader<R, B>,
+  f: (a: A) => Reader<R, B>
 ) => <E>(
-  ma: ReaderTaskEither<R, E, A>,
+  ma: ReaderTaskEither<R, E, A>
 ) => ReaderTaskEither<
   R,
   E,
   { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }
-> = (name, f) => rte.bind(name, a => rte.fromReader(f(a)));
+> = (name, f) => rte.bind(name, (a) => rte.fromReader(f(a)));
 
 export const bindReaderKW: <N extends string, A, R2, B>(
   name: Exclude<N, keyof A>,
-  f: (a: A) => Reader<R2, B>,
+  f: (a: A) => Reader<R2, B>
 ) => <R1, E>(
-  ma: ReaderTaskEither<R1, E, A>,
+  ma: ReaderTaskEither<R1, E, A>
 ) => ReaderTaskEither<
   R1 & R2,
   E,
   { readonly [K in N | keyof A]: K extends keyof A ? A[K] : B }
-> = (name, f) => rte.bindW(name, a => rte.rightReader(f(a)));
+> = (name, f) => rte.bindW(name, (a) => rte.rightReader(f(a)));

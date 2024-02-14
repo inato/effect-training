@@ -4,10 +4,10 @@
 // - Either
 // - TaskEither
 
-import { either, option, taskEither } from 'fp-ts';
-import { flow, pipe } from 'fp-ts/function';
+import type { Effect, Option } from "effect";
+import { flow, pipe } from "effect";
 
-import { sleep } from '../utils';
+import { sleep } from "../utils";
 
 export const divide = (a: number, b: number): number => {
   return a / b;
@@ -44,8 +44,8 @@ export const safeDivide = (a: number, b: number) => {
 export const safeDivideBonus = (a: number, b: number) =>
   pipe(
     b,
-    option.fromPredicate(n => n != 0),
-    option.map(b => a / b),
+    option.fromPredicate((n) => n != 0),
+    option.map((b) => a / b)
   );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -64,11 +64,11 @@ export const safeDivideBonus = (a: number, b: number) =>
 // - `either.fromOption(() => leftValue)(option)`
 
 // Here is an simple error type to help you:
-export const DivisionByZero = 'Error: Division by zero' as const;
+export const DivisionByZero = "Error: Division by zero" as const;
 
 export const safeDivideWithError = flow(
   safeDivide,
-  either.fromOption(() => DivisionByZero),
+  either.fromOption(() => DivisionByZero)
 );
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -81,7 +81,7 @@ export const asyncDivide = async (a: number, b: number) => {
   await sleep(1000);
 
   if (b === 0) {
-    throw new Error('BOOM!');
+    throw new Error("BOOM!");
   }
 
   return a / b;
@@ -97,5 +97,5 @@ export const asyncDivide = async (a: number, b: number) => {
 export const asyncSafeDivideWithError = (a: number, b: number) =>
   taskEither.tryCatch(
     () => asyncDivide(a, b),
-    () => DivisionByZero,
+    () => DivisionByZero
   );
