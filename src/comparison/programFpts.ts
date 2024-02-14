@@ -1,6 +1,14 @@
 // `fp-ts` version of a program
 
-import { reader, readerTaskEither, taskEither } from "fp-ts";
+import {
+  either,
+  option,
+  reader,
+  readerTaskEither,
+  readonlyArray,
+  taskEither,
+} from "fp-ts";
+import type { Option } from "fp-ts/lib/Option";
 import type { TaskEither } from "fp-ts/lib/TaskEither";
 import { pipe } from "fp-ts/lib/function";
 
@@ -12,14 +20,22 @@ interface User {
 }
 
 interface UserRepository {
-  getById: (id: string) => TaskEither<"UnexpectedError", User>;
+  findById: (id: string) => TaskEither<"UnexpectedError", Option<User>>;
 }
 
-const getUserById = (id: string) =>
+const findUserById = (id: string) =>
   pipe(
     readerTaskEither.ask<{ userRepository: UserRepository }>(),
     readerTaskEither.flatMapTaskEither(({ userRepository }) =>
-      userRepository.getById(id)
+      userRepository.findById(id)
+    )
+  );
+
+const getUserById = (id: string) =>
+  pipe(
+    findUserById(id),
+    readerTaskEither.flatMapEither(
+      either.fromOption(() => "User not found" as const)
     )
   );
 
@@ -36,7 +52,7 @@ const getThisYear = () =>
 const capitalize = (str: string) =>
   `${str.charAt(0).toUpperCase()}${str.slice(1)}`;
 
-export const getCapitalizedUserName = ({ userId }: { userId: string }) =>
+export const getCapitalizedUserName = (userId: string) =>
   pipe(
     getUserById(userId),
     readerTaskEither.map((user) => capitalize(user.name))
@@ -53,16 +69,23 @@ export const getConcatenationOfTheTwoUserNames = ({
     readerTaskEither.Do,
     readerTaskEither.apS(
       "userOneCapitalizedName",
-      getCapitalizedUserName({ userId: userIdOne })
+      getCapitalizedUserName(userIdOne)
     ),
     readerTaskEither.apS(
       "userTwoCapitalizedName",
-      getCapitalizedUserName({ userId: userIdTwo })
+      getCapitalizedUserName(userIdTwo)
     ),
     readerTaskEither.map(
       ({ userOneCapitalizedName, userTwoCapitalizedName }) =>
         userOneCapitalizedName + userTwoCapitalizedName
     )
+  );
+
+export const getConcatenationOfManyUserNames = (userIds: Array<string>) =>
+  pipe(
+    userIds,
+    readerTaskEither.traverseArray(getCapitalizedUserName),
+    readerTaskEither.map(readonlyArray.reduce("", (acc, name) => acc + name))
   );
 
 export const getConcatenationOfTheBestFriendNameAndUserName = ({
@@ -72,7 +95,7 @@ export const getConcatenationOfTheBestFriendNameAndUserName = ({
 }) =>
   pipe(
     readerTaskEither.Do,
-    readerTaskEither.apS("userOne", getUserById(userIdOne)),
+    readerTaskEither.bind("userOne", () => getUserById(userIdOne)),
     readerTaskEither.bind("userTwo", ({ userOne }) =>
       getUserById(userOne.bestFriendId)
     ),
@@ -98,8 +121,10 @@ async function main() {
   };
 
   const userRepository: UserRepository = {
-    getById(id) {
-      return taskEither.right({ id, name: "name", bestFriendId: "userId" });
+    findById(id) {
+      return taskEither.right(
+        option.some({ id, name: "name", bestFriendId: "userId" })
+      );
     },
   };
 

@@ -1,6 +1,6 @@
 // `Effect` version of a program
 
-import { pipe, Effect, Context } from "effect";
+import { pipe, Effect, Context, Option, ReadonlyArray } from "effect";
 
 type UserId = string;
 interface User {
@@ -10,15 +10,24 @@ interface User {
 }
 
 interface UserRepository {
-  getById: (id: string) => Effect.Effect<User, "UnexpectedError">;
+  findById: (
+    id: string
+  ) => Effect.Effect<Option.Option<User>, "UnexpectedError">;
 }
 
 const UserRepository = Context.GenericTag<UserRepository>("UserRepository");
 
-const getUserById = (
-  id: string
-): Effect.Effect<User, "UnexpectedError", UserRepository> =>
-  Effect.flatMap(UserRepository, (repository) => repository.getById(id));
+const findUserById = (id: string) =>
+  Effect.flatMap(UserRepository, (repository) => repository.findById(id));
+
+const getUserById = (id: string) =>
+  pipe(
+    findUserById(id),
+    Effect.flatten,
+    Effect.catchTag("NoSuchElementException", () =>
+      Effect.fail("User not found" as const)
+    )
+  );
 
 interface TimeService {
   thisYear: () => number;
@@ -32,7 +41,7 @@ const getThisYear = (): Effect.Effect<number, never, TimeService> =>
 const capitalize = (str: string) =>
   `${str.charAt(0).toUpperCase()}${str.slice(1)}`;
 
-export const getCapitalizedUserName = ({ userId }: { userId: string }) =>
+export const getCapitalizedUserName = (userId: string) =>
   pipe(
     getUserById(userId),
     Effect.map((user) => capitalize(user.name))
@@ -47,13 +56,20 @@ export const getConcatenationOfTheTwoUserNames = ({
 }) =>
   pipe(
     Effect.all({
-      userOneCapitalizedName: getCapitalizedUserName({ userId: userIdOne }),
-      userTwoCapitalizedName: getCapitalizedUserName({ userId: userIdTwo }),
+      userOneCapitalizedName: getCapitalizedUserName(userIdOne),
+      userTwoCapitalizedName: getCapitalizedUserName(userIdTwo),
     }),
     Effect.map(
       ({ userOneCapitalizedName, userTwoCapitalizedName }) =>
         userOneCapitalizedName + userTwoCapitalizedName
     )
+  );
+
+export const getConcatenationOfManyUserNames = (userIds: Array<string>) =>
+  pipe(
+    userIds.map(getCapitalizedUserName),
+    (tasks) => Effect.all(tasks, { concurrency: "unbounded" }),
+    Effect.map(ReadonlyArray.join(""))
   );
 
 export const getConcatenationOfTheBestFriendNameAndUserName = (
@@ -95,8 +111,10 @@ async function main() {
   };
 
   const userRepository: UserRepository = {
-    getById(id) {
-      return Effect.succeed({ id, name: "name", bestFriendId: "userId" });
+    findById(id) {
+      return Effect.succeed(
+        Option.some({ id, name: "name", bestFriendId: "userId" })
+      );
     },
   };
 
@@ -104,6 +122,7 @@ async function main() {
     getConcatenationOfUserNameAndCurrentYear("1"),
     Effect.provideService(UserRepository, userRepository),
     Effect.provideService(TimeService, timeService),
+    Effect.either,
     Effect.runPromise
   );
 }
