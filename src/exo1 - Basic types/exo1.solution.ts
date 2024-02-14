@@ -4,7 +4,7 @@
 // - Either
 // - TaskEither
 
-import { Effect, Option } from "effect";
+import { Effect, Either, Option } from "effect";
 import { flow, pipe } from "effect";
 
 import { sleep } from "../utils";
@@ -44,7 +44,7 @@ export const safeDivide = (a: number, b: number) => {
 export const safeDivideBonus = (a: number, b: number) =>
   pipe(
     b,
-    Option.fromPredicate((n) => n != 0),
+    Option.liftPredicate((n) => n != 0),
     Option.map((b) => a / b)
   );
 
@@ -68,11 +68,11 @@ export const DivisionByZero = "Error: Division by zero" as const;
 
 export const safeDivideWithError = flow(
   safeDivide,
-  either.fromOption(() => DivisionByZero)
+  Either.fromOption(() => DivisionByZero)
 );
 
 ///////////////////////////////////////////////////////////////////////////////
-//                                TASKEITHER                                 //
+//                                  Effect                                   //
 ///////////////////////////////////////////////////////////////////////////////
 
 // Now let's say we have a (pretend) API call that will perform the division for us
@@ -95,7 +95,7 @@ export const asyncDivide = async (a: number, b: number) => {
 // - `taskEither.tryCatch(f: () => promise, onReject: reason => leftValue)`
 
 export const asyncSafeDivideWithError = (a: number, b: number) =>
-  taskEither.tryCatch(
-    () => asyncDivide(a, b),
-    () => DivisionByZero
-  );
+  Effect.tryPromise({
+    try: () => asyncDivide(a, b),
+    catch: () => DivisionByZero,
+  });
