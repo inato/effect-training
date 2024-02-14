@@ -1,4 +1,5 @@
-import { either, option } from "effect";
+import { describe, expect, it } from "bun:test";
+import { Either, Option } from "effect";
 import * as exercise from "./exo1.exercise";
 import * as solution from "./exo1.solution";
 import { isTestingSolution } from "../testUtils";

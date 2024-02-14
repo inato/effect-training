@@ -1,69 +1,71 @@
-import { isTestingSolution } from '../testUtils';
-import * as exercise from './exo4.exercise';
-import * as solution from './exo4.solution';
+import { describe, expect, it } from "bun:test";
+import { Either, Option } from "effect";
+import { isTestingSolution } from "../testUtils";
+import * as exercise from "./exo4.exercise";
+import * as solution from "./exo4.solution";
 
 const { Country, exclamation, greet, excitedlyGreet } = isTestingSolution()
   ? solution
   : exercise;
 
-describe('exo4', () => {
-  describe('greet', () => {
-    it('should greet Alice in french', () => {
-      const result = greet('Alice')(Country.France);
+describe("exo4", () => {
+  describe("greet", () => {
+    it("should greet Alice in french", () => {
+      const result = greet("Alice")(Country.France);
 
-      expect(result).toStrictEqual('Bonjour, Alice');
+      expect(result).toStrictEqual("Bonjour, Alice");
     });
 
-    it('should greet Bernardo in spanish', () => {
-      const result = greet('Bernardo')(Country.Spain);
+    it("should greet Bernardo in spanish", () => {
+      const result = greet("Bernardo")(Country.Spain);
 
-      expect(result).toStrictEqual('Buenos dìas, Bernardo');
+      expect(result).toStrictEqual("Buenos dìas, Bernardo");
     });
 
-    it('should greet Crystal in english', () => {
-      const result = greet('Crystal')(Country.USA);
+    it("should greet Crystal in english", () => {
+      const result = greet("Crystal")(Country.USA);
 
-      expect(result).toStrictEqual('Hello, Crystal');
+      expect(result).toStrictEqual("Hello, Crystal");
     });
   });
 
-  describe('exclamation', () => {
+  describe("exclamation", () => {
     it('should add exclamation in french style (with a space before "!")', () => {
-      const result = exclamation('Youpi')(Country.France);
+      const result = exclamation("Youpi")(Country.France);
 
-      expect(result).toStrictEqual('Youpi !');
+      expect(result).toStrictEqual("Youpi !");
     });
 
     it('should add exclamation in spanish style (between "¡" and "!")', () => {
-      const result = exclamation('Olé')(Country.Spain);
+      const result = exclamation("Olé")(Country.Spain);
 
-      expect(result).toStrictEqual('¡Olé!');
+      expect(result).toStrictEqual("¡Olé!");
     });
 
     it('should add exclamation in english style (with no space before "!")', () => {
-      const result = exclamation('Yeah')(Country.USA);
+      const result = exclamation("Yeah")(Country.USA);
 
-      expect(result).toStrictEqual('Yeah!');
+      expect(result).toStrictEqual("Yeah!");
     });
   });
 
-  describe('excitedlyGreet', () => {
-    it('should excitedly greet Alice in french', () => {
-      const result = excitedlyGreet('Alice')(Country.France);
+  describe("excitedlyGreet", () => {
+    it("should excitedly greet Alice in french", () => {
+      const result = excitedlyGreet("Alice")(Country.France);
 
-      expect(result).toStrictEqual('Bonjour, Alice !');
+      expect(result).toStrictEqual("Bonjour, Alice !");
     });
 
-    it('should excitedly greet Bernardo in spanish', () => {
-      const result = excitedlyGreet('Bernardo')(Country.Spain);
+    it("should excitedly greet Bernardo in spanish", () => {
+      const result = excitedlyGreet("Bernardo")(Country.Spain);
 
-      expect(result).toStrictEqual('¡Buenos dìas, Bernardo!');
+      expect(result).toStrictEqual("¡Buenos dìas, Bernardo!");
     });
 
-    it('should excitedly greet Crystal in english', () => {
-      const result = excitedlyGreet('Crystal')(Country.USA);
+    it("should excitedly greet Crystal in english", () => {
+      const result = excitedlyGreet("Crystal")(Country.USA);
 
-      expect(result).toStrictEqual('Hello, Crystal!');
+      expect(result).toStrictEqual("Hello, Crystal!");
     });
   });
 });
