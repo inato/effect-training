@@ -11,7 +11,6 @@ import {
   Scope,
   Exit,
 } from "effect";
-import { cons } from "effect/List";
 
 // Repository and services
 
