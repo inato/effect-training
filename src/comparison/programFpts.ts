@@ -81,6 +81,28 @@ export const getCapitalizedUserName = (userId: string) =>
     readerTaskEither.map((user) => capitalize(user.name))
   );
 
+export const getCapitalizedUserName2 = (userId: string) =>
+  pipe(
+    getUserById(userId),
+    readerTaskEither.map((user) => capitalize(user.name))
+  );
+
+export const getCapitalizedUserName3 = (userId: string) =>
+  pipe(
+    getUserById(userId),
+    readerTaskEither.flatMap((user) =>
+      readerTaskEither.right(capitalize(user.name))
+    )
+  );
+
+export const getCapitalizedUserName4 = (userId: string) =>
+  pipe(
+    getUserById(userId),
+    readerTaskEither.flatMapEither((user) =>
+      either.right(capitalize(user.name))
+    )
+  );
+
 /**
  *
  *

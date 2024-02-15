@@ -80,6 +80,21 @@ export const getCapitalizedUserName = (userId: string) =>
     Effect.map((user) => capitalize(user.name))
   );
 
+export const getCapitalizedUserName2 = (userId: string) =>
+  pipe(
+    getUserById(userId),
+    Effect.andThen((user) => capitalize(user.name))
+  );
+
+export const getCapitalizedUserName3 = (userId: string) =>
+  pipe(
+    getUserById(userId),
+    Effect.andThen((user) => Effect.succeed(capitalize(user.name)))
+  );
+
+export const getCapitalizedUserName4 = (userId: string) =>
+  pipe(getUserById(userId), Effect.andThen("blob" as const));
+
 /**
  *
  *
