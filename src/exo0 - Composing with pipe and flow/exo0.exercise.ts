@@ -1,4 +1,4 @@
-// `fp-ts` training introduction
+// `Effect` training introduction
 // Composing computations with `pipe` and `flow`
 
 // Functional programming is all about composing small functions together like
@@ -8,7 +8,7 @@
 // result of the first one to the second one. By applying this composition
 // over and over you can chain multiple functions together.
 //
-// The `fp-ts` library provides helpers to do that:
+// The `Effect` library provides helpers to do that:
 // - `pipe` which first needs to be fed a value to start the pipe and then
 //   any number of functions to be applied sequentially.
 // - `flow` which is the same thing but where we do not have to provide the
