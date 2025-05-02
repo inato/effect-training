@@ -2,17 +2,20 @@
   "name": "effect-training",
   "type": "module",
   "devDependencies": {
-    "@types/bun": "latest"
+    "@types/bun": "latest",
+    "bun": "^1.0.0"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
   },
   "dependencies": {
-    "effect": "^2.3.5",
-    "fp-ts": "^2.16.2"
+    "decod": "^6.1.6",
+    "effect": "^3.14.8",
+    "fp-ts": "^2.16.10"
   },
   "scripts": {
     "test": "bun test",
     "test:solution": "TEST_SOLUTION=true bun test"
-  }
+  },
+  "packageManager": "pnpm@9.15.4+sha512.b2dc20e2fc72b3e18848459b37359a32064663e5627a51e4c74b2c29dd8e8e0491483c3abb40789cfd578bf362fb6ba8261b05f0387d76792ed6e23ea3b1b6a0"
 }

@@ -2,38 +2,39 @@
 
 ## Prerequisites
 
-- install [bun](https://bun.sh)
+- install [pnpm](https://pnpm.io/installation)
+- bun will be automatically installed as a project dependency
 
 ## Get started
 
 - install dependencies
 
 ```sh
-bun i
+pnpm install
 ```
 
 - run all solution tests
 
 ```sh
-bun run test:solution
+pnpm test:solution
 ```
 
 - run all exercise tests
 
 ```sh
-bun test
+pnpm test
 ```
 
-- run one solution test
+- run one solution tests
 
 ```sh
-bun run test:solution exo0
+pnpm test:solution exo0
 ```
 
-- run all exercise tests
+- run one exercise tests
 
 ```sh
-bun test exo0
+pnpm test exo0
 ```
 
 > 💡 To enable watch mode, use `--watch`
