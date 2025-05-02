@@ -1,22 +1,15 @@
-// `fp-ts` training Exercise 2
+// `Effect` training Exercise 2
 // Let's have fun with combinators!
 
 import { Failure } from "../Failure";
 
-import {
-  Effect,
-  ReadonlyArray,
-  type Either,
-  type Option,
-  flow,
-  pipe,
-} from "effect";
+import { Array, Either, Option, flow, pipe } from "effect";
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                   SETUP                                   //
 ///////////////////////////////////////////////////////////////////////////////
 
-// We are developing a small game, and the player can control either one of
+// We are developing a small game, and the player can control Either one of
 // three types of characters, mainly differentiated by the type of damage they
 // can put out.
 
@@ -105,12 +98,12 @@ export const invalidAttackerFailure = Failure.builder(
 // and return the expected damage type if appropriate.
 //
 // If no attacker is selected, it should return
-// `either.left(noAttackerFailure('No attacker currently selected'))`
+// `Either.left(noAttackerFailure('No attacker currently selected'))`
 //
 // If an attacker of the wrong type is selected, it should return
-// `either.left(invalidAttackerFailure('<attacker_type> cannot perform <action>'))`
+// `Either.left(invalidAttackerFailure('<attacker_type> cannot perform <action>'))`
 //
-// Otherwise, it should return `either.right(<expected_damage_type>)`
+// Otherwise, it should return `Either.right(<expected_damage_type>)`
 //
 // HINT: These functions represent the public API. But it is heavily
 // recommended to break those down into smaller private functions that can be
@@ -123,45 +116,45 @@ export const invalidAttackerFailure = Failure.builder(
 // common operations done with the `Either` type and it is available through
 // the `flatMap` operator.
 
-const checkSelected = either.fromOption(() =>
+const checkSelected = Either.fromOption(() =>
   noAttackerFailure("No attacker currently selected")
 );
 
-const checkWarrior = either.fromPredicate(isWarrior, (character) =>
+const checkWarrior = Either.liftPredicate(isWarrior, (character) =>
   invalidAttackerFailure(`${character.toString()} cannot perform smash`)
 );
 
-const checkWizard = either.fromPredicate(isWizard, (character) =>
+const checkWizard = Either.liftPredicate(isWizard, (character) =>
   invalidAttackerFailure(`${character.toString()} cannot perform burn`)
 );
 
-const checkArcher = either.fromPredicate(isArcher, (character) =>
+const checkArcher = Either.liftPredicate(isArcher, (character) =>
   invalidAttackerFailure(`${character.toString()} cannot perform shoot`)
 );
 
 const smash = flow(
   checkWarrior,
-  either.map((warrior) => warrior.smash())
+  Either.map((warrior: Warrior) => warrior.smash())
 );
 
 const burn = flow(
   checkWizard,
-  either.map((wizard) => wizard.burn())
+  Either.map((wizard: Wizard) => wizard.burn())
 );
 
 const shoot = flow(
   checkArcher,
-  either.map((archer) => archer.shoot())
+  Either.map((archer: Archer) => archer.shoot())
 );
 
-export const checkAttackerAndSmash = (attacker: Option<Character>) =>
-  pipe(attacker, checkSelected, either.flatMap(smash));
+export const checkAttackerAndSmash = (attacker: Option.Option<Character>) =>
+  pipe(attacker, checkSelected, Either.flatMap(smash));
 
-export const checkAttackerAndBurn = (attacker: Option<Character>) =>
-  pipe(attacker, checkSelected, either.flatMap(burn));
+export const checkAttackerAndBurn = (attacker: Option.Option<Character>) =>
+  pipe(attacker, checkSelected, Either.flatMap(burn));
 
-export const checkAttackerAndShoot = (attacker: Option<Character>) =>
-  pipe(attacker, checkSelected, either.flatMap(shoot));
+export const checkAttackerAndShoot = (attacker: Option.Option<Character>) =>
+  pipe(attacker, checkSelected, Either.flatMap(shoot));
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                  OPTION                                   //
@@ -174,17 +167,17 @@ export const checkAttackerAndShoot = (attacker: Option<Character>) =>
 // recommended to break those down into smaller private functions that can be
 // reused instead of doing one big `pipe` for each.
 //
-// HINT: `Option` has a special constructor `fromEither` that discards the
+// HINT: `Option` has a special constructor `getRight` that discards the
 // error type.
 //
 // BONUS POINTS: If you properly defined small private helpers in the previous
 // section, they should be easily reused for those use-cases.
 
-export const smashOption = flow(smash, Option.fromEither);
+export const smashOption = flow(smash, Option.getRight);
 
-export const burnOption = flow(burn, Option.fromEither);
+export const burnOption = flow(burn, Option.getRight);
 
-export const shootOption = flow(shoot, Option.fromEither);
+export const shootOption = flow(shoot, Option.getRight);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                   ARRAY                                   //
@@ -195,7 +188,7 @@ export const shootOption = flow(shoot, Option.fromEither);
 //
 // HINT: You should be able to reuse the attackOption variants defined earlier
 //
-// HINT: `ReadonlyArray` from `fp-ts` has a neat `filterMap` function that
+// HINT: `Array` from `Effect` has a neat `filterMap` function that
 // perform mapping and filtering at the same time by applying a function
 // of type `A => Option<B>` over the collection.
 
@@ -205,20 +198,8 @@ export interface TotalDamage {
   [Damage.Ranged]: number;
 }
 
-export const attack = (army: ReadonlyArray<Character>) => ({
-  [Damage.Physical]: pipe(
-    army,
-    readonlyArray.filterMap(smashOption),
-    readonlyArray.size
-  ),
-  [Damage.Magical]: pipe(
-    army,
-    readonlyArray.filterMap(burnOption),
-    readonlyArray.size
-  ),
-  [Damage.Ranged]: pipe(
-    army,
-    readonlyArray.filterMap(shootOption),
-    readonlyArray.size
-  ),
+export const attack = (army: Array<Character>) => ({
+  [Damage.Physical]: pipe(army, Array.filterMap(smashOption), Array.length),
+  [Damage.Magical]: pipe(army, Array.filterMap(burnOption), Array.length),
+  [Damage.Ranged]: pipe(army, Array.filterMap(shootOption), Array.length),
 });

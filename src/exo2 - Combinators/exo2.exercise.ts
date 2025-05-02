@@ -1,15 +1,9 @@
-// `fp-ts` training Exercise 2
+// `Effect` training Exercise 2
 // Let's have fun with combinators!
 
-import {
-  Effect,
-  ReadonlyArray,
-  type Either,
-  type Option,
-  flow,
-  pipe,
-} from "effect";
+import { ReadonlyArray, type Either, type Option } from "effect";
 
+import { Failure } from "../Failure";
 import { unimplemented } from "../utils";
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -170,7 +164,7 @@ export const shootOption: (character: Character) => Option<Damage> =
 //
 // HINT: You should be able to reuse the attackOption variants defined earlier
 //
-// HINT: `ReadonlyArray` from `fp-ts` has a neat `filterMap` function that
+// HINT: `ReadonlyArray` from `Effect` has a neat `filterMap` function that
 // perform mapping and filtering at the same time by applying a function
 // of type `A => Option<B>` over the collection.
 
