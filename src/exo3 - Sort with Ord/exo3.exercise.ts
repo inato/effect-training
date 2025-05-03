@@ -1,4 +1,4 @@
-// `fp-ts` training Exercise 3
+// `Effect` training Exercise 3
 // Sort things out with `Ord`
 
 import {
@@ -12,16 +12,16 @@ import {
 
 import { unimplemented } from "../utils";
 
-// Have you ever looked at the methods provided by `fp-ts` own `Array` and
+// Have you ever looked at the methods provided by `Effect` own `Array` and
 // `ReadonlyArray` modules? They expose a load of functions to manipulate
 // those collections.
 //
 // Some of those you likely are already familiar with, like `map` or `filter`.
 // The difference with JavaScript's native `Array.prototype` methods is that
-// these are more `fp-ts` friendly.
+// these are more `Effect` friendly.
 //
 // In the following exercise, we will take a look at `array.sort`. Contrary to
-// its JavaScript counterpart, `fp-ts` sort takes as an argument something of
+// its JavaScript counterpart, `Effect` sort takes as an argument something of
 // type `Ord<T>` where `T` is the type of elements contained in the collection.
 //
 // You can think as `Ord<T>` as "something which describes how to order `T`s".
@@ -34,11 +34,11 @@ import { unimplemented } from "../utils";
 // like `string` or `number` and return a new array with those values but
 // sorted.
 //
-// Obviously, we want to call `readonlyArray.sort` (the `fp-ts` version! no
+// Obviously, we want to call `readonlyArray.sort` (the `Effect` version! no
 // cheating). But, contrary to `ReadonlyArray.prototype.sort` which takes an
 // ordering function, this sort will only accept an `Ord<T>`.
 //
-// HINT: The primitive type modules from `fp-ts` (`number`, `string`...)
+// HINT: The primitive type modules from `Effect` (`number`, `string`...)
 // expose some pre constructed instances of `Ord<T>` for said primitives such as
 // `string.Ord: Ord<string>` or `number.Ord: Ord<number>`.
 
@@ -77,7 +77,7 @@ export const sortNumbersDescending: (
 // As such, we cannot simply use `number.Ord` because it has type `Ord<number>`
 // and we need an instance of `Ord<Option<number>>`.
 //
-// HINT: Some of `fp-ts` wrapper types such as `Option` do already have a way
+// HINT: Some of `Effect` wrapper types such as `Option` do already have a way
 // of building an `Ord` instance for their qualified inner type. You may want
 // to take a look at `Option.getOrd`.
 

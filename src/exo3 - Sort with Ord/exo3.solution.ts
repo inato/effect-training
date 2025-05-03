@@ -1,28 +1,20 @@
-// `fp-ts` training Exercise 3
+// Effect training Exercise 3
 // Sort things out with `Ord`
 
-import {
-  Effect,
-  ReadonlyArray,
-  type Either,
-  type Option,
-  flow,
-  pipe,
-} from "effect";
+import { Option, Array, Order, pipe } from "effect";
 
-// Have you ever looked at the methods provided by `fp-ts` own `Array` and
-// `ReadonlyArray` modules? They expose a load of functions to manipulate
-// those collections.
+// Have you ever looked at the methods provided by Effect's `Array` module?
+// They expose a load of functions to manipulate collections.
 //
 // Some of those you likely are already familiar with, like `map` or `filter`.
 // The difference with JavaScript's native `Array.prototype` methods is that
-// these are more `fp-ts` friendly.
+// these are more functional programming friendly.
 //
-// In the following exercise, we will take a look at `array.sort`. Contrary to
-// its JavaScript counterpart, `fp-ts` sort takes as an argument something of
-// type `Ord<T>` where `T` is the type of elements contained in the collection.
+// In the following exercise, we will take a look at `Array.sort`. Contrary to
+// its JavaScript counterpart, Effect's sort takes as an argument something of
+// type `Order<T>` where `T` is the type of elements contained in the collection.
 //
-// You can think as `Ord<T>` as "something which describes how to order `T`s".
+// You can think of `Order<T>` as "something which describes how to order `T`s".
 
 ///////////////////////////////////////////////////////////////////////////////
 //                          SORT PRIMITIVE TYPES                             //
@@ -32,17 +24,17 @@ import {
 // like `string` or `number` and return a new array with those values but
 // sorted.
 //
-// Obviously, we want to call `readonlyArray.sort` (the `fp-ts` version! no
-// cheating). But, contrary to `ReadonlyArray.prototype.sort` which takes an
-// ordering function, this sort will only accept an `Ord<T>`.
+// Obviously, we want to call `Array.sort` (the Effect version! no cheating).
+// But, contrary to `Array.prototype.sort` which takes an ordering function,
+// this sort will only accept an `Order<T>`.
 //
-// HINT: The primitive type modules from `fp-ts` (`number`, `string`...)
-// expose some preconstructed instances of `Ord<T>` for said primitives such as
-// `string.Ord: Ord<string>` or `number.Ord: Ord<number>`.
+// HINT: The primitive type modules from Effect (`Number`, `String`...)
+// expose some pre-constructed instances of `Order<T>` for said primitives such as
+// `Order.string: Order<string>` or `Order.number: Order<number>`.
 
-export const sortStrings = readonlyArray.sort(string.Ord);
+export const sortStrings = Array.sort(Order.string);
 
-export const sortNumbers = readonlyArray.sort(number.Ord);
+export const sortNumbers = Array.sort(Order.number);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                REVERSE SORT                               //
@@ -50,34 +42,35 @@ export const sortNumbers = readonlyArray.sort(number.Ord);
 
 // This next function will sort an array of numbers but in descending order
 // (which unfortunately is the reverse ordering from the one provided by
-// `number.Ord`).
+// `Number.Order`).
 //
 // Sure, we could just use `sortNumbers` defined earlier and then reverse the
-// whole array but that would be horribly inefficient wouldn't it?
+// whole array but that would be horribly inefficient, wouldn't it?
 //
-// HINT: Any ordering can be reversed with a simple function `ord.reverse`.
+// HINT: Any ordering can be reversed with `Order.reverse`.
 
-export const sortNumbersDescending = readonlyArray.sort(
-  ord.reverse(number.Ord)
-);
+export const sortNumbersDescending = (
+  numbers: ReadonlyArray<number>
+): ReadonlyArray<number> => Array.sort(numbers, Order.reverse(Order.number));
 
 ///////////////////////////////////////////////////////////////////////////////
 //                            SORT OPTIONAL VALUES                           //
 ///////////////////////////////////////////////////////////////////////////////
 
 // This next function will sort an array of numbers wrapped in `Option` with
-// the following constraint: `Option.none` < `Option.some(_)`.
+// the following constraint: `Option.none()` < `Option.some(_)`.
 //
-// As such, we cannot simply use `number.Ord` because it has type `Ord<number>`
-// and we need an instance of `Ord<Option<number>>`.
+// As such, we cannot simply use `Number.Order` because it has type `Order<number>`
+// and we need an instance of `Order<Option<number>>`.
 //
-// HINT: Some of `fp-ts` wrapper types such as `Option` do already have a way
-// of building an `Ord` instance for their qualified inner type. You may want
-// to take a look at `Option.getOrd`.
+// HINT: Some of Effect wrapper types such as `Option` do already have a way
+// of building an `Order` instance for their qualified inner type. You may want
+// to take a look at `Option.getOrder`.
 
-export const sortOptionalNumbers = readonlyArray.sort(
-  Option.getOrd(number.Ord)
-);
+export const sortOptionalNumbers = (
+  optionalNumbers: ReadonlyArray<Option.Option<number>>
+): ReadonlyArray<Option.Option<number>> =>
+  Array.sort(optionalNumbers, Option.getOrder(Order.number));
 
 ///////////////////////////////////////////////////////////////////////////////
 //                           SORT COMPLEX OBJECTS                            //
@@ -92,29 +85,29 @@ export const sortOptionalNumbers = readonlyArray.sort(
 // ordering of the person's names, and the other will sort it by the person's
 // ages.
 //
-// HINT: You can build an instance of `Ord` specialized for a field for a
+// HINT: You can build an instance of `Order` specialized for a field for a
 // record with many fields by declaring how to access that field and which
-// primitive `Ord` instance to use. This can be achieved with `ord.contramap`.
+// primitive `Order` instance to use. This can be achieved with `Order.mapInput`.
 
 export interface Person {
   readonly name: string;
-  readonly age: Option<number>;
+  readonly age: Option.Option<number>;
 }
 
-const byName = pipe(
-  string.Ord,
-  ord.contramap((person: Person) => person.name)
+const byName = Order.mapInput(Order.string, (person: Person) => person.name);
+
+export const sortPersonsByName = (
+  persons: ReadonlyArray<Person>
+): ReadonlyArray<Person> => pipe(persons, Array.sort(byName));
+
+const byAge = Order.mapInput(
+  Option.getOrder(Order.number),
+  (person: Person) => person.age
 );
 
-export const sortPersonsByName = readonlyArray.sort(byName);
-
-const byAge = pipe(
-  number.Ord,
-  Option.getOrd,
-  ord.contramap((person: Person) => person.age)
-);
-
-export const sortPersonsByAge = readonlyArray.sort(byAge);
+export const sortPersonsByAge = (
+  persons: ReadonlyArray<Person>
+): ReadonlyArray<Person> => pipe(persons, Array.sort(byAge));
 
 ///////////////////////////////////////////////////////////////////////////////
 //                          COMBINE SORTING SCHEMES                          //
@@ -123,19 +116,9 @@ export const sortPersonsByAge = readonlyArray.sort(byAge);
 // Now, we want to sort the array first by age, but for people of the same age,
 // we want to sort them by name.
 //
-// HINT: Take a look at `readonlyArray.sortBy`
+// HINT: Take a look at `Order.combine` to combine multiple orders
 
-// Below is the full low-level method. Easier to just use `sortBy`
-//
-// ```ts
-// import { monoid } from 'effect';
-//
-// const byAgeThenByName = monoid.concatAll(ord.getMonoid<Person>())([
-//   byAge,
-//   byName,
-// ]);
-//
-// export const sortPersonsByAgeThenByName = readonlyArray.sort(byAgeThenByName);
-// ```
-
-export const sortPersonsByAgeThenByName = readonlyArray.sortBy([byAge, byName]);
+export const sortPersonsByAgeThenByName = (
+  persons: ReadonlyArray<Person>
+): ReadonlyArray<Person> =>
+  pipe(persons, Array.sort(Order.combine(byAge, byName)));
