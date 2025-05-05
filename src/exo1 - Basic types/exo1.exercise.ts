@@ -2,7 +2,7 @@
 // Basic types:
 // - Option
 // - Either
-// - liftPredicate
+// - Effect
 
 import { unimplemented, sleep } from "../utils";
 import { Effect, type Either, type Option } from "effect";
