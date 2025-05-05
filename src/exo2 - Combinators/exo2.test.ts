@@ -3,7 +3,6 @@ import { Either, Option } from "effect";
 import * as exercise from "./exo2.exercise";
 import * as solution from "./exo2.solution";
 import { isTestingSolution } from "../testUtils";
-import type { Character } from "./exo2.solution";
 
 const {
   Warrior,
@@ -24,7 +23,7 @@ const {
 describe("exo2", () => {
   describe("checkAttackerAndSmash", () => {
     it("should return a NoAttacker error if no attacker is selected", () => {
-      const result = checkAttackerAndSmash(Option.none<Character>());
+      const result = checkAttackerAndSmash(Option.none());
       const expected = Either.left(
         noAttackerFailure("No attacker currently selected")
       );
@@ -61,7 +60,7 @@ describe("exo2", () => {
 
   describe("checkAttackerAndBurn", () => {
     it("should return a NoAttacker error if no attacker is selected", () => {
-      const result = checkAttackerAndBurn(Option.none<Character>());
+      const result = checkAttackerAndBurn(Option.none());
       const expected = Either.left(
         noAttackerFailure("No attacker currently selected")
       );
@@ -98,7 +97,7 @@ describe("exo2", () => {
 
   describe("checkAttackerAndShoot", () => {
     it("should return a NoAttacker error if no attacker is selected", () => {
-      const result = checkAttackerAndShoot(Option.none<Character>());
+      const result = checkAttackerAndShoot(Option.none());
       const expected = Either.left(
         noAttackerFailure("No attacker currently selected")
       );
