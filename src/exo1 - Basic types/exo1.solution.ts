@@ -44,8 +44,8 @@ export const safeDivide = (a: number, b: number) => {
 export const safeDivideBonus = (a: number, b: number): Option.Option<number> =>
   pipe(
     b,
-    Option.liftPredicate((n: number) => n != 0),
-    Option.map((b: number) => a / b)
+    Option.liftPredicate((n) => n != 0),
+    Option.map((b) => a / b)
   );
 
 ///////////////////////////////////////////////////////////////////////////////
