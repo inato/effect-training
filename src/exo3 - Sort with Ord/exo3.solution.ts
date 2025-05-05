@@ -49,9 +49,9 @@ export const sortNumbers = Array.sort(Order.number);
 //
 // HINT: Any ordering can be reversed with `Order.reverse`.
 
-export const sortNumbersDescending = (
+export const sortNumbersDescending: (
   numbers: ReadonlyArray<number>
-): ReadonlyArray<number> => Array.sort(numbers, Order.reverse(Order.number));
+) => ReadonlyArray<number> = Array.sort(Order.reverse(Order.number));
 
 ///////////////////////////////////////////////////////////////////////////////
 //                            SORT OPTIONAL VALUES                           //
@@ -67,10 +67,11 @@ export const sortNumbersDescending = (
 // of building an `Order` instance for their qualified inner type. You may want
 // to take a look at `Option.getOrder`.
 
-export const sortOptionalNumbers = (
+export const sortOptionalNumbers: (
   optionalNumbers: ReadonlyArray<Option.Option<number>>
-): ReadonlyArray<Option.Option<number>> =>
-  Array.sort(optionalNumbers, Option.getOrder(Order.number));
+) => ReadonlyArray<Option.Option<number>> = Array.sort(
+  Option.getOrder(Order.number)
+);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                           SORT COMPLEX OBJECTS                            //
@@ -94,15 +95,19 @@ export interface Person {
   readonly age: Option.Option<number>;
 }
 
-const byName = Order.mapInput(Order.string, (person: Person) => person.name);
+const byName = pipe(
+  Order.string,
+  Order.mapInput((person: Person) => person.name)
+);
 
 export const sortPersonsByName = (
   persons: ReadonlyArray<Person>
 ): ReadonlyArray<Person> => pipe(persons, Array.sort(byName));
 
-const byAge = Order.mapInput(
-  Option.getOrder(Order.number),
-  (person: Person) => person.age
+const byAge = pipe(
+  Order.number,
+  Option.getOrder,
+  Order.mapInput((person: Person) => person.age)
 );
 
 export const sortPersonsByAge = (
