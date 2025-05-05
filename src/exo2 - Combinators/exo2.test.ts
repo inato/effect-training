@@ -224,9 +224,9 @@ describe("exo2", () => {
 
       const result = attack(army);
       const expected = {
-        [Damage.Physical]: 2,
-        [Damage.Magical]: 4,
-        [Damage.Ranged]: 3,
+        "Physical damage": 2,
+        "Magical damage": 4,
+        "Ranged damage": 3,
       };
 
       expect(result).toStrictEqual(expected);
