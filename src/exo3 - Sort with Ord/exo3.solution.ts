@@ -1,5 +1,5 @@
 // Effect training Exercise 3
-// Sort things out with `Ord`
+// Sort things out with `Order`
 
 import { Option, Array, Order, pipe } from "effect";
 
@@ -42,7 +42,7 @@ export const sortNumbers = Array.sort(Order.number);
 
 // This next function will sort an array of numbers but in descending order
 // (which unfortunately is the reverse ordering from the one provided by
-// `Number.Order`).
+// `Order.number`).
 //
 // Sure, we could just use `sortNumbers` defined earlier and then reverse the
 // whole array but that would be horribly inefficient, wouldn't it?
@@ -60,7 +60,7 @@ export const sortNumbersDescending = (
 // This next function will sort an array of numbers wrapped in `Option` with
 // the following constraint: `Option.none()` < `Option.some(_)`.
 //
-// As such, we cannot simply use `Number.Order` because it has type `Order<number>`
+// As such, we cannot simply use `Order.number` because it has type `Order<number>`
 // and we need an instance of `Order<Option<number>>`.
 //
 // HINT: Some of Effect wrapper types such as `Option` do already have a way
