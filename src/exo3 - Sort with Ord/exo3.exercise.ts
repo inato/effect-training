@@ -1,30 +1,22 @@
 // `Effect` training Exercise 3
-// Sort things out with `Ord`
+// Sort things out with `Order`
 
-import {
-  Effect,
-  ReadonlyArray,
-  type Either,
-  type Option,
-  flow,
-  pipe,
-} from "effect";
+import { Option } from "effect";
 
 import { unimplemented } from "../utils";
 
-// Have you ever looked at the methods provided by `Effect` own `Array` and
-// `ReadonlyArray` modules? They expose a load of functions to manipulate
-// those collections.
+// Have you ever looked at the methods provided by Effect's `Array` module?
+// They expose a load of functions to manipulate collections.
 //
 // Some of those you likely are already familiar with, like `map` or `filter`.
 // The difference with JavaScript's native `Array.prototype` methods is that
-// these are more `Effect` friendly.
+// these are more functional programming friendly.
 //
-// In the following exercise, we will take a look at `array.sort`. Contrary to
-// its JavaScript counterpart, `Effect` sort takes as an argument something of
-// type `Ord<T>` where `T` is the type of elements contained in the collection.
+// In the following exercise, we will take a look at `Array.sort`. Contrary to
+// its JavaScript counterpart, Effect's sort takes as an argument something of
+// type `Order<T>` where `T` is the type of elements contained in the collection.
 //
-// You can think as `Ord<T>` as "something which describes how to order `T`s".
+// You can think of `Order<T>` as "something which describes how to order `T`s".
 
 ///////////////////////////////////////////////////////////////////////////////
 //                          SORT PRIMITIVE TYPES                             //
@@ -34,13 +26,13 @@ import { unimplemented } from "../utils";
 // like `string` or `number` and return a new array with those values but
 // sorted.
 //
-// Obviously, we want to call `readonlyArray.sort` (the `Effect` version! no
-// cheating). But, contrary to `ReadonlyArray.prototype.sort` which takes an
-// ordering function, this sort will only accept an `Ord<T>`.
+// Obviously, we want to call `Array.sort` (the Effect version! no cheating).
+// But, contrary to `Array.prototype.sort` which takes an ordering function,
+// this sort will only accept an `Order<T>`.
 //
-// HINT: The primitive type modules from `Effect` (`number`, `string`...)
-// expose some pre constructed instances of `Ord<T>` for said primitives such as
-// `string.Ord: Ord<string>` or `number.Ord: Ord<number>`.
+// HINT: The primitive type modules from Effect (`Number`, `String`...)
+// expose some pre-constructed instances of `Order<T>` for said primitives such as
+// `Order.string: Order<string>` or `Order.number: Order<number>`.
 
 export const sortStrings: (
   strings: ReadonlyArray<string>
@@ -56,12 +48,12 @@ export const sortNumbers: (
 
 // This next function will sort an array of numbers but in descending order
 // (which unfortunately is the reverse ordering from the one provided by
-// `number.Ord`).
+// `Order.number`).
 //
 // Sure, we could just use `sortNumbers` defined earlier and then reverse the
 // whole array but that would be horribly inefficient, wouldn't it?
 //
-// HINT: Any ordering can be reversed with a simple function `ord.reverse`.
+// HINT: Any ordering can be reversed with `Order.reverse`.
 
 export const sortNumbersDescending: (
   numbers: ReadonlyArray<number>
@@ -72,18 +64,18 @@ export const sortNumbersDescending: (
 ///////////////////////////////////////////////////////////////////////////////
 
 // This next function will sort an array of numbers wrapped in `Option` with
-// the following constraint: `Option.none` < `Option.some(_)`.
+// the following constraint: `Option.none()` < `Option.some(_)`.
 //
-// As such, we cannot simply use `number.Ord` because it has type `Ord<number>`
-// and we need an instance of `Ord<Option<number>>`.
+// As such, we cannot simply use `Order.number` because it has type `Order<number>`
+// and we need an instance of `Order<Option<number>>`.
 //
-// HINT: Some of `Effect` wrapper types such as `Option` do already have a way
-// of building an `Ord` instance for their qualified inner type. You may want
-// to take a look at `Option.getOrd`.
+// HINT: Some of Effect wrapper types such as `Option` do already have a way
+// of building an `Order` instance for their qualified inner type. You may want
+// to take a look at `Option.getOrder`.
 
 export const sortOptionalNumbers: (
-  optionalNumbers: ReadonlyArray<Option<number>>
-) => ReadonlyArray<Option<number>> = unimplemented;
+  optionalNumbers: ReadonlyArray<Option.Option<number>>
+) => ReadonlyArray<Option.Option<number>> = unimplemented;
 
 ///////////////////////////////////////////////////////////////////////////////
 //                           SORT COMPLEX OBJECTS                            //
@@ -98,13 +90,13 @@ export const sortOptionalNumbers: (
 // ordering of the person's names, and the other will sort it by the person's
 // ages.
 //
-// HINT: You can build an instance of `Ord` specialized for a field for a
+// HINT: You can build an instance of `Order` specialized for a field for a
 // record with many fields by declaring how to access that field and which
-// primitive `Ord` instance to use. This can be achieved with `ord.contramap`.
+// primitive `Order` instance to use. This can be achieved with `Order.mapInput`.
 
 export interface Person {
   readonly name: string;
-  readonly age: Option<number>;
+  readonly age: Option.Option<number>;
 }
 
 export const sortPersonsByName: (
@@ -122,8 +114,14 @@ export const sortPersonsByAge: (
 // Now, we want to sort the array first by age, but for people of the same age,
 // we want to sort them by name.
 //
-// HINT: Take a look at `readonlyArray.sortBy`
+// HINT: Take a look at `Order.combine` to combine multiple orders
 
 export const sortPersonsByAgeThenByName: (
+  persons: ReadonlyArray<Person>
+) => ReadonlyArray<Person> = unimplemented;
+
+// BONUS POINT: Use Array.sortBy to sort the array without using Order.combine
+
+export const sortPersonsByAgeThenByNameBonus: (
   persons: ReadonlyArray<Person>
 ) => ReadonlyArray<Person> = unimplemented;

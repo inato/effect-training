@@ -1,8 +1,7 @@
 // `Effect` training Exercise 2
 // Let's have fun with combinators!
 
-import { ReadonlyArray, type Either, type Option } from "effect";
-
+import type { Either, Option } from "effect";
 import { Failure } from "../Failure";
 import { unimplemented } from "../utils";
 
@@ -118,16 +117,19 @@ export const invalidAttackerFailure = Failure.builder(
 // the `flatMap` operator.
 
 export const checkAttackerAndSmash: (
-  attacker: Option<Character>
-) => Either<NoAttackerFailure | InvalidAttackerFailure, Damage> = unimplemented;
+  attacker: Option.Option<Character>
+) => Either.Either<NoAttackerFailure | InvalidAttackerFailure, Damage> =
+  unimplemented;
 
 export const checkAttackerAndBurn: (
-  attacker: Option<Character>
-) => Either<NoAttackerFailure | InvalidAttackerFailure, Damage> = unimplemented;
+  attacker: Option.Option<Character>
+) => Either.Either<NoAttackerFailure | InvalidAttackerFailure, Damage> =
+  unimplemented;
 
 export const checkAttackerAndShoot: (
-  attacker: Option<Character>
-) => Either<NoAttackerFailure | InvalidAttackerFailure, Damage> = unimplemented;
+  attacker: Option.Option<Character>
+) => Either.Either<NoAttackerFailure | InvalidAttackerFailure, Damage> =
+  unimplemented;
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                  OPTION                                   //
@@ -146,13 +148,13 @@ export const checkAttackerAndShoot: (
 // BONUS POINTS: If you properly defined small private helpers in the previous
 // section, they should be easily reused for those use-cases.
 
-export const smashOption: (character: Character) => Option<Damage> =
+export const smashOption: (character: Character) => Option.Option<Damage> =
   unimplemented;
 
-export const burnOption: (character: Character) => Option<Damage> =
+export const burnOption: (character: Character) => Option.Option<Damage> =
   unimplemented;
 
-export const shootOption: (character: Character) => Option<Damage> =
+export const shootOption: (character: Character) => Option.Option<Damage> =
   unimplemented;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -164,7 +166,7 @@ export const shootOption: (character: Character) => Option<Damage> =
 //
 // HINT: You should be able to reuse the attackOption variants defined earlier
 //
-// HINT: `ReadonlyArray` from `Effect` has a neat `filterMap` function that
+// HINT: `Array` from `Effect` has a neat `filterMap` function that
 // perform mapping and filtering at the same time by applying a function
 // of type `A => Option<B>` over the collection.
 
