@@ -13,6 +13,7 @@ const {
   sortPersonsByName,
   sortPersonsByAge,
   sortPersonsByAgeThenByName,
+  sortPersonsByAgeThenByNameBonus,
 } = isTestingSolution() ? solution : exercise;
 
 describe("exo3", () => {
@@ -94,7 +95,7 @@ describe("exo3", () => {
     });
   });
 
-  describe("sortPersonsByName", () => {
+  describe("sortPersonsByAgeThenByName", () => {
     it("should return an array of persons sorted first by age and then by name", () => {
       const alice = { name: "Alice", age: Option.some(42) };
       const bob = { name: "Bob", age: Option.none() };
@@ -105,6 +106,23 @@ describe("exo3", () => {
       const persons = [dorian, alice, edgar, bob, crystal];
 
       const result = sortPersonsByAgeThenByName(persons);
+      const expected = [bob, edgar, crystal, dorian, alice];
+
+      expect(result).toStrictEqual(expected);
+    });
+  });
+
+  describe("sortPersonsByAgeThenByNameBonus", () => {
+    it("should return an array of persons sorted first by age and then by name", () => {
+      const alice = { name: "Alice", age: Option.some(42) };
+      const bob = { name: "Bob", age: Option.none() };
+      const crystal = { name: "Crystal", age: Option.some(29) };
+      const dorian = { name: "Dorian", age: Option.some(29) };
+      const edgar = { name: "Edgar", age: Option.none() };
+
+      const persons = [dorian, alice, edgar, bob, crystal];
+
+      const result = sortPersonsByAgeThenByNameBonus(persons);
       const expected = [bob, edgar, crystal, dorian, alice];
 
       expect(result).toStrictEqual(expected);

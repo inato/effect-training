@@ -119,3 +119,9 @@ export const sortPersonsByAge: (
 export const sortPersonsByAgeThenByName: (
   persons: ReadonlyArray<Person>
 ) => ReadonlyArray<Person> = unimplemented;
+
+// BONUS POINT: Use Array.sortBy to sort the array without using Order.combine
+
+export const sortPersonsByAgeThenByNameBonus: (
+  persons: ReadonlyArray<Person>
+) => ReadonlyArray<Person> = unimplemented;
