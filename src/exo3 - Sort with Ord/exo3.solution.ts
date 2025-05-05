@@ -100,9 +100,9 @@ const byName = pipe(
   Order.mapInput((person: Person) => person.name)
 );
 
-export const sortPersonsByName = (
+export const sortPersonsByName: (
   persons: ReadonlyArray<Person>
-): ReadonlyArray<Person> => pipe(persons, Array.sort(byName));
+) => ReadonlyArray<Person> = Array.sort(byName);
 
 const byAge = pipe(
   Order.number,
@@ -110,9 +110,9 @@ const byAge = pipe(
   Order.mapInput((person: Person) => person.age)
 );
 
-export const sortPersonsByAge = (
+export const sortPersonsByAge: (
   persons: ReadonlyArray<Person>
-): ReadonlyArray<Person> => pipe(persons, Array.sort(byAge));
+) => ReadonlyArray<Person> = Array.sort(byAge);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                          COMBINE SORTING SCHEMES                          //
@@ -123,7 +123,6 @@ export const sortPersonsByAge = (
 //
 // HINT: Take a look at `Order.combine` to combine multiple orders
 
-export const sortPersonsByAgeThenByName = (
+export const sortPersonsByAgeThenByName: (
   persons: ReadonlyArray<Person>
-): ReadonlyArray<Person> =>
-  pipe(persons, Array.sort(Order.combine(byAge, byName)));
+) => ReadonlyArray<Person> = Array.sort(Order.combine(byAge, byName));
