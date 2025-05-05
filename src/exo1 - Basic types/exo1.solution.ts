@@ -60,10 +60,10 @@ export const safeDivideBonus = (a: number, b: number): Option.Option<number> =>
 // HINT : Either has two basic constructors:
 // - `Either.left(leftValue)`
 // - `Either.right(rightValue)`
-// as well as "smarter" constructors like:
-// supported - `Either.fromOption(() => leftValue)(option)`
-// preferred - `Either.fromOption(option, () => leftValue)`
-// because Effect supports dual API.
+// as well as "smarter" constructors like `Either.fromOption` which you can use:
+// like this: `Either.fromOption(() => leftValue)(option)`
+// or like this: `Either.fromOption(option, () => leftValue)`
+// because Effect supports dual APIs.
 
 // Here is an simple error type to help you:
 export type DivisionByZeroError = "Error: Division by zero";
