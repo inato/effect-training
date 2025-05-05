@@ -1,14 +1,7 @@
 // `Effect` training Exercise 3
 // Sort things out with `Ord`
 
-import {
-  Effect,
-  ReadonlyArray,
-  type Either,
-  type Option,
-  flow,
-  pipe,
-} from "effect";
+import { Option } from "effect";
 
 import { unimplemented } from "../utils";
 
@@ -82,8 +75,8 @@ export const sortNumbersDescending: (
 // to take a look at `Option.getOrd`.
 
 export const sortOptionalNumbers: (
-  optionalNumbers: ReadonlyArray<Option<number>>
-) => ReadonlyArray<Option<number>> = unimplemented;
+  optionalNumbers: ReadonlyArray<Option.Option<number>>
+) => ReadonlyArray<Option.Option<number>> = unimplemented;
 
 ///////////////////////////////////////////////////////////////////////////////
 //                           SORT COMPLEX OBJECTS                            //
@@ -104,7 +97,7 @@ export const sortOptionalNumbers: (
 
 export interface Person {
   readonly name: string;
-  readonly age: Option<number>;
+  readonly age: Option.Option<number>;
 }
 
 export const sortPersonsByName: (
