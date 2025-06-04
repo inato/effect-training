@@ -118,18 +118,16 @@ export const invalidAttackerFailure = Failure.builder(
 
 export const checkAttackerAndSmash: (
   attacker: Option.Option<Character>
-) => Either.Either<NoAttackerFailure | InvalidAttackerFailure, Damage> =
-  unimplemented;
+) => Either.Either<Damage, NoAttackerFailure | InvalidAttackerFailure> = unimplemented;
 
 export const checkAttackerAndBurn: (
   attacker: Option.Option<Character>
-) => Either.Either<NoAttackerFailure | InvalidAttackerFailure, Damage> =
-  unimplemented;
+) => Either.Either<Damage, NoAttackerFailure | InvalidAttackerFailure> = unimplemented;
+
 
 export const checkAttackerAndShoot: (
   attacker: Option.Option<Character>
-) => Either.Either<NoAttackerFailure | InvalidAttackerFailure, Damage> =
-  unimplemented;
+) => Either.Either<Damage, NoAttackerFailure | InvalidAttackerFailure> = unimplemented;
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                  OPTION                                   //

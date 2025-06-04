@@ -5,7 +5,7 @@
 // - Effect
 
 import { unimplemented, sleep } from "../utils";
-import { Effect, type Either, type Option } from "effect";
+import { Effect, Option, Either } from "effect";
 
 export const divide = (a: number, b: number): number => {
   return a / b;
@@ -58,7 +58,7 @@ export const DivisionByZero = "Error: Division by zero" as const;
 export const safeDivideWithError: (
   a: number,
   b: number
-) => Either.Either<DivisionByZeroError, number> = unimplemented;
+) => Either.Either<number, DivisionByZeroError> = unimplemented;
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                  EFFECT                                   //
@@ -92,4 +92,4 @@ export const asyncDivide = async (a: number, b: number) => {
 export const asyncSafeDivideWithError: (
   a: number,
   b: number
-) => Effect.Effect<number, DivisionByZeroError> = Effect.die;
+  ) => Effect.Effect<number, DivisionByZeroError> = Effect.die;
