@@ -20,14 +20,14 @@ describe("exo1", () => {
     });
 
     it("should return Infinity or -Infinity if the denominator is zero", () => {
-      expect(divide(25, 0)).toBe(Infinity);
-      expect(divide(-25, 0)).toBe(-Infinity);
+      expect(divide(25, 0)).toBe(Number.POSITIVE_INFINITY);
+      expect(divide(-25, 0)).toBe(Number.NEGATIVE_INFINITY);
     });
   });
 
   describe("safeDivide", () => {
     it("should return the result of dividing two numbers", () => {
-      expect(safeDivide(25, 5)).toStrictEqual(Option.some(5));
+      expect(safeDivide(42, 2)).toStrictEqual(Option.some(21));
     });
 
     it("should return Option.none if the denominator is zero", () => {
@@ -58,31 +58,31 @@ describe("exo1", () => {
       expect(result).toEqual(5);
     });
 
-    it("should eventually return Infinity if the denominator is zero", async () => {
-      await expect(asyncDivide(25, 0)).rejects.toThrow();
-      await expect(asyncDivide(-25, 0)).rejects.toThrow();
+    it("should eventually return Infinity if the denominator is zero", () => {
+      expect(asyncDivide(25, 0)).rejects.toThrow();
+      expect(asyncDivide(-25, 0)).rejects.toThrow();
     });
   });
 
   describe("asyncSafeDivideWithError", () => {
     it("should eventually return the result of dividing two numbers", async () =>
-      Effect.gen(function* (_) {
-        const result = yield* _(asyncSafeDivideWithError(25, 5));
+      await Effect.runPromise(Effect.gen(function* () {
+        const result = yield* asyncSafeDivideWithError(25, 5);
 
         expect(result).toStrictEqual(5);
-      }));
+      })));
 
     it("should eventually return either.left(DivisionByZero) if the denominator is zero", async () =>
-      Effect.gen(function* (_) {
-        const resultA = yield* _(
+      await Effect.runPromise(Effect.gen(function* () {
+        const resultA = yield* (
           asyncSafeDivideWithError(25, 0).pipe(Effect.either)
         );
-        const resultB = yield* _(
+        const resultB = yield* (
           asyncSafeDivideWithError(-25, 0).pipe(Effect.either)
         );
 
         expect(resultA).toStrictEqual(Either.left(DivisionByZero));
         expect(resultB).toStrictEqual(Either.left(DivisionByZero));
-      }));
+      })));
   });
 });

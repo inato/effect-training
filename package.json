@@ -3,7 +3,8 @@
   "type": "module",
   "devDependencies": {
     "@types/bun": "latest",
-    "bun": "^1.0.0"
+    "bun": "^1.0.0",
+    "@biomejs/biome": "1.9.4"
   },
   "peerDependencies": {
     "typescript": "^5.0.0"
