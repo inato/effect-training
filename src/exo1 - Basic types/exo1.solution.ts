@@ -17,6 +17,10 @@ export const divide = (a: number, b: number): number => {
 //                                  OPTION                                   //
 ///////////////////////////////////////////////////////////////////////////////
 
+// An Option represents a value which might be there, or not.
+// If it's there then it is Option.Some(value) and if not it is Option.none
+// You can think of an option as something that can be null or undefined.
+//
 // Write the safe version (meaning it handles the case where b is 0) of `divide` with signature:
 // safeDivide : (a: number, b: number) => Option<number>
 //
@@ -39,7 +43,7 @@ export const safeDivide = (a: number, b: number) => {
 //
 // BONUS: Try now to re-write `safeDivide` without any `if`
 //
-// HINT: Have a look at `liftPredicate` constructor
+// HINT: Have a look at `liftPredicate` constructor of Option
 
 export const safeDivideBonus = (a: number, b: number): Option.Option<number> =>
   pipe(
@@ -52,6 +56,13 @@ export const safeDivideBonus = (a: number, b: number): Option.Option<number> =>
 //                                  EITHER                                   //
 ///////////////////////////////////////////////////////////////////////////////
 
+// An Either represents a computation that can have two results, called branches or tracks (left and right).
+// Most of the time, we use it to represent a computation that can fail. So the left branch represents the failure, and the right branch the success.
+// So when we manipulate an Either, if we enter the left branch, we most of the time won't carry out further manipulations,
+// and just return the Error context that is encapsulated in the left branch (it is still accessible tho, through different helpers).
+// If we are in the right branch, we'll keep on manipulating the value and passing it through the right branch.
+// An Either is typed Either<A, E> where A is the type of the right track (the success) and E is the type of the left track (the failure).
+//
 // Write the safe version of `divide` with signature:
 // safeDivideWithError : (a: number, b: number) => Either<number, DivisionByZeroError>
 //
