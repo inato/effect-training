@@ -109,7 +109,7 @@ export const invalidAttackerFailure = Failure.builder(
 // recommended to break those down into smaller private functions that can be
 // reused instead of doing one big `pipe` for each.
 //
-// HINT: `Either` has a special constructor `fromPredicate` that can accept
+// HINT: `Either` has a special constructor `liftPredicate` that can accept
 // a type guard such as `isWarrior` to help with type inference.
 //
 // HINT: Sequentially check for various possible errors is one of the most
