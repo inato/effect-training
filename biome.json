@@ -1,0 +1,12 @@
+{
+    "linter": {
+        "rules": {
+            "suspicious": {
+                "noShadowRestrictedNames": "off"
+            },
+            "style": {
+                "useImportType": "off"
+            }
+        }
+    }
+}
