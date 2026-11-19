@@ -27,7 +27,7 @@ export const divide = (a: number, b: number): number => {
 // - `Option.none`
 
 export const safeDivide: (a: number, b: number) => Option.Option<number> =
-  unimplemented;
+  (a, b) => b === 0 ? Option.none() : Option.some(a / b);
 
 // You probably wrote `safeDivide` using `if` statements, and it's perfectly valid!
 // There are ways to not use `if` statements.
@@ -69,7 +69,14 @@ export const DivisionByZero = "Error: Division by zero" as const;
 export const safeDivideWithError: (
   a: number,
   b: number
-) => Either.Either<number, DivisionByZeroError> = unimplemented;
+) => Either.Either<number, DivisionByZeroError> = (a, b) => {
+  const result = safeDivide(a, b);
+  if (Option.isSome(result)) {
+    return Either.right(result.value);
+  } else {
+    return Either.left("Error: Division by zero");
+  }
+};
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                  EFFECT                                   //
@@ -103,4 +110,7 @@ export const asyncDivide = async (a: number, b: number) => {
 export const asyncSafeDivideWithError: (
   a: number,
   b: number
-) => Effect.Effect<number, DivisionByZeroError> = Effect.die;
+) => Effect.Effect<number, DivisionByZeroError> = (a, b) => Effect.tryPromise({
+  try: () => asyncDivide(a, b),
+  catch: () => "Error: Division by zero",
+});
