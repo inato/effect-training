@@ -1,9 +1,10 @@
 // `Effect` training Exercise 2
 // Let's have fun with combinators!
 
-import type { Either, Option } from "effect";
+import { Array, Either, flow, Option, pipe } from "effect";
 import { Failure } from "../Failure";
 import { unimplemented } from "../utils";
+import { effect } from "effect/Layer";
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                   SETUP                                   //
@@ -116,18 +117,43 @@ export const invalidAttackerFailure = Failure.builder(
 // common operations done with the `Either` type and it is available through
 // the `flatMap` operator.
 
+const checkCharacterSelected = Either.fromOption(() => noAttackerFailure("No character selected"));
+
+const checkCharacterWarrior = Either.liftPredicate(isWarrior, () => invalidAttackerFailure("Character is not a warrior"));
+
+const checkCharacterWizard = Either.liftPredicate(isWizard, () => invalidAttackerFailure("Character is not a wizard"));
+
+const checkCharacterArcher = Either.liftPredicate(isArcher, () => invalidAttackerFailure("Character is not an archer"));
+
+
+const smash = flow(checkCharacterWarrior, Either.map(warrior => warrior.smash()));
+const burn = flow(checkCharacterWizard, Either.map(warrior => warrior.burn()));
+const shoot = flow(checkCharacterArcher, Either.map(warrior => warrior.shoot()));
+
 export const checkAttackerAndSmash: (
   attacker: Option.Option<Character>
-) => Either.Either<Damage, NoAttackerFailure | InvalidAttackerFailure> = unimplemented;
+) => Either.Either<Damage, NoAttackerFailure | InvalidAttackerFailure> = attacker => pipe(
+  attacker,
+  checkCharacterSelected,
+  Either.flatMap(smash),
+)
 
 export const checkAttackerAndBurn: (
   attacker: Option.Option<Character>
-) => Either.Either<Damage, NoAttackerFailure | InvalidAttackerFailure> = unimplemented;
+) => Either.Either<Damage, NoAttackerFailure | InvalidAttackerFailure> = attacker => pipe(
+  attacker,
+  checkCharacterSelected,
+  Either.flatMap(burn),
+);
 
 
 export const checkAttackerAndShoot: (
   attacker: Option.Option<Character>
-) => Either.Either<Damage, NoAttackerFailure | InvalidAttackerFailure> = unimplemented;
+) => Either.Either<Damage, NoAttackerFailure | InvalidAttackerFailure> = attacker => pipe(
+  attacker,
+  checkCharacterSelected,
+  Either.flatMap(shoot),
+);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                  OPTION                                   //
@@ -147,13 +173,13 @@ export const checkAttackerAndShoot: (
 // section, they should be easily reused for those use-cases.
 
 export const smashOption: (character: Character) => Option.Option<Damage> =
-  unimplemented;
+  flow(smash, Option.getRight);
 
 export const burnOption: (character: Character) => Option.Option<Damage> =
-  unimplemented;
+  flow(burn, Option.getRight);
 
 export const shootOption: (character: Character) => Option.Option<Damage> =
-  unimplemented;
+  flow(shoot, Option.getRight);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                   ARRAY                                   //
@@ -175,4 +201,8 @@ export interface TotalDamage {
 }
 
 export const attack: (army: ReadonlyArray<Character>) => TotalDamage =
-  unimplemented;
+  army => ({
+    [Damage.Physical]: pipe(army, Array.filterMap(smashOption), Array.length),
+    [Damage.Magical]: pipe(army, Array.filterMap(burnOption), Array.length),
+    [Damage.Ranged]: pipe(army, Array.filterMap(shootOption), Array.length),
+  })
