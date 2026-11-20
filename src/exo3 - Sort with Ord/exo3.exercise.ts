@@ -1,7 +1,7 @@
 // `Effect` training Exercise 3
 // Sort things out with `Order`
 
-import { Option } from "effect";
+import { Array, Number, Option, Order, String } from "effect";
 
 import { unimplemented } from "../utils";
 
@@ -36,11 +36,11 @@ import { unimplemented } from "../utils";
 
 export const sortStrings: (
   strings: ReadonlyArray<string>
-) => ReadonlyArray<string> = unimplemented;
+) => ReadonlyArray<string> = Array.sort(String.Order);
 
 export const sortNumbers: (
   numbers: ReadonlyArray<number>
-) => ReadonlyArray<number> = unimplemented;
+) => ReadonlyArray<number> = Array.sort(Number.Order);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                                REVERSE SORT                               //
@@ -57,7 +57,7 @@ export const sortNumbers: (
 
 export const sortNumbersDescending: (
   numbers: ReadonlyArray<number>
-) => ReadonlyArray<number> = unimplemented;
+) => ReadonlyArray<number> = Array.sort(Order.reverse(Number.Order));
 
 ///////////////////////////////////////////////////////////////////////////////
 //                            SORT OPTIONAL VALUES                           //
@@ -73,9 +73,10 @@ export const sortNumbersDescending: (
 // of building an `Order` instance for their qualified inner type. You may want
 // to take a look at `Option.getOrder`.
 
+const OptionalNumberOrder = Option.getOrder(Number.Order);
 export const sortOptionalNumbers: (
   optionalNumbers: ReadonlyArray<Option.Option<number>>
-) => ReadonlyArray<Option.Option<number>> = unimplemented;
+) => ReadonlyArray<Option.Option<number>> = Array.sort(OptionalNumberOrder);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                           SORT COMPLEX OBJECTS                            //
@@ -99,13 +100,15 @@ export interface Person {
   readonly age: Option.Option<number>;
 }
 
+const PersonByNameOrder = Order.mapInput(String.Order, (person: Person) => person.name);
 export const sortPersonsByName: (
   persons: ReadonlyArray<Person>
-) => ReadonlyArray<Person> = unimplemented;
+) => ReadonlyArray<Person> = Array.sort(PersonByNameOrder);
 
+const PersonByOptionalAgeOrder = Order.mapInput(Option.getOrder(Number.Order), (person: Person) => person.age);
 export const sortPersonsByAge: (
   persons: ReadonlyArray<Person>
-) => ReadonlyArray<Person> = unimplemented;
+) => ReadonlyArray<Person> = Array.sort(PersonByOptionalAgeOrder);
 
 ///////////////////////////////////////////////////////////////////////////////
 //                          COMBINE SORTING SCHEMES                          //
@@ -118,10 +121,10 @@ export const sortPersonsByAge: (
 
 export const sortPersonsByAgeThenByName: (
   persons: ReadonlyArray<Person>
-) => ReadonlyArray<Person> = unimplemented;
+) => ReadonlyArray<Person> = Array.sort(Order.combine(PersonByOptionalAgeOrder, PersonByNameOrder));
 
 // BONUS POINT: Use Array.sortBy to sort the array without using Order.combine
 
 export const sortPersonsByAgeThenByNameBonus: (
   persons: ReadonlyArray<Person>
-) => ReadonlyArray<Person> = unimplemented;
+) => ReadonlyArray<Person> = Array.sortBy(PersonByOptionalAgeOrder, PersonByNameOrder);
