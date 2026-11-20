@@ -9,7 +9,7 @@ import { Array, Either, Option, flow, pipe } from "effect";
 //                                   SETUP                                   //
 ///////////////////////////////////////////////////////////////////////////////
 
-// We are developing a small game, and the player can control Either one of
+// We are developing a small game, and the player can control either one of
 // three types of characters, mainly differentiated by the type of damage they
 // can put out.
 
@@ -97,11 +97,13 @@ export const invalidAttackerFailure = Failure.builder(
 // The next three functions take the character currently selected by the player as the attacker
 // and return the expected damage type if appropriate.
 //
-// If no attacker is selected, it should return
-// `Either.left(noAttackerFailure('No attacker currently selected'))`
+// If no attacker is selected, it should return a `Left` holding a
+// `noAttackerFailure(...)` (e.g. 'No attacker currently selected')
 //
-// If an attacker of the wrong type is selected, it should return
-// `Either.left(invalidAttackerFailure('<attacker_type> cannot perform <action>'))`
+// If an attacker of the wrong type is selected, it should return a `Left`
+// holding an `invalidAttackerFailure(...)` (e.g. '<attacker_type> cannot perform <action>')
+//
+// Only the failure type is checked by the tests, the message is up to you.
 //
 // Otherwise, it should return `Either.right(<expected_damage_type>)`
 //
@@ -109,7 +111,10 @@ export const invalidAttackerFailure = Failure.builder(
 // recommended to break those down into smaller private functions that can be
 // reused instead of doing one big `pipe` for each.
 //
-// HINT: `Either` has a special constructor `fromPredicate` that can accept
+// HINT: `Either.fromOption` turns an `Option` into an `Either`, using the
+// provided function to build the error in the `None` case.
+//
+// HINT: `Either` has a special constructor `liftPredicate` that can accept
 // a type guard such as `isWarrior` to help with type inference.
 //
 // HINT: Sequentially check for various possible errors is one of the most
@@ -167,8 +172,8 @@ export const checkAttackerAndShoot = (attacker: Option.Option<Character>) =>
 // recommended to break those down into smaller private functions that can be
 // reused instead of doing one big `pipe` for each.
 //
-// HINT: `Option` has a special constructor `getRight` that discards the
-// error type.
+// HINT: `Option.getRight` converts an `Either` into an `Option`, discarding
+// the error type.
 //
 // BONUS POINTS: If you properly defined small private helpers in the previous
 // section, they should be easily reused for those use-cases.

@@ -9,8 +9,7 @@ const {
   Wizard,
   Archer,
   Damage,
-  noAttackerFailure,
-  invalidAttackerFailure,
+  Exo2FailureType,
   checkAttackerAndSmash,
   checkAttackerAndBurn,
   checkAttackerAndShoot,
@@ -20,33 +19,34 @@ const {
   attack,
 } = isTestingSolution() ? solution : exercise;
 
+// Only the failure type matters, not the reason message
+const expectFailure = (
+  result: Either.Either<unknown, { type: string }>,
+  type: string
+) => {
+  expect(Either.isLeft(result)).toBe(true);
+  if (Either.isLeft(result)) {
+    expect(result.left.type).toBe(type);
+  }
+};
+
 describe("exo2", () => {
   describe("checkAttackerAndSmash", () => {
     it("should return a NoAttacker error if no attacker is selected", () => {
       const result = checkAttackerAndSmash(Option.none());
-      const expected = Either.left(
-        noAttackerFailure("No attacker currently selected")
-      );
-
-      expect(result).toStrictEqual(expected);
+      expectFailure(result, Exo2FailureType.NoAttacker);
     });
 
     it("should return an InvalidAttacker error if the wrong attacker is selected", () => {
       const archer = new Archer();
       const resultArcher = checkAttackerAndSmash(Option.some(archer));
-      const expectedArcher = Either.left(
-        invalidAttackerFailure("Archer cannot perform smash")
-      );
 
       const wizard = new Wizard();
       const resultWizard = checkAttackerAndSmash(Option.some(wizard));
-      const expectedWizard = Either.left(
-        invalidAttackerFailure("Wizard cannot perform smash")
-      );
 
-      expect(resultArcher).toStrictEqual(expectedArcher);
+      expectFailure(resultArcher, Exo2FailureType.InvalidAttacker);
 
-      expect(resultWizard).toStrictEqual(expectedWizard);
+      expectFailure(resultWizard, Exo2FailureType.InvalidAttacker);
     });
 
     it("should return the proper type of damage", () => {
@@ -61,29 +61,19 @@ describe("exo2", () => {
   describe("checkAttackerAndBurn", () => {
     it("should return a NoAttacker error if no attacker is selected", () => {
       const result = checkAttackerAndBurn(Option.none());
-      const expected = Either.left(
-        noAttackerFailure("No attacker currently selected")
-      );
-
-      expect(result).toStrictEqual(expected);
+      expectFailure(result, Exo2FailureType.NoAttacker);
     });
 
     it("should return an InvalidAttacker error if the wrong attacker is selected", () => {
       const warrior = new Warrior();
       const resultWarrior = checkAttackerAndBurn(Option.some(warrior));
-      const expectedWarrior = Either.left(
-        invalidAttackerFailure("Warrior cannot perform burn")
-      );
 
       const archer = new Archer();
       const resultArcher = checkAttackerAndBurn(Option.some(archer));
-      const expectedArcher = Either.left(
-        invalidAttackerFailure("Archer cannot perform burn")
-      );
 
-      expect(resultWarrior).toStrictEqual(expectedWarrior);
+      expectFailure(resultWarrior, Exo2FailureType.InvalidAttacker);
 
-      expect(resultArcher).toStrictEqual(expectedArcher);
+      expectFailure(resultArcher, Exo2FailureType.InvalidAttacker);
     });
 
     it("should return the proper type of damage", () => {
@@ -98,29 +88,19 @@ describe("exo2", () => {
   describe("checkAttackerAndShoot", () => {
     it("should return a NoAttacker error if no attacker is selected", () => {
       const result = checkAttackerAndShoot(Option.none());
-      const expected = Either.left(
-        noAttackerFailure("No attacker currently selected")
-      );
-
-      expect(result).toStrictEqual(expected);
+      expectFailure(result, Exo2FailureType.NoAttacker);
     });
 
     it("should return an InvalidAttacker error if the wrong attacker is selected", () => {
       const warrior = new Warrior();
       const resultWarrior = checkAttackerAndShoot(Option.some(warrior));
-      const expectedWarrior = Either.left(
-        invalidAttackerFailure("Warrior cannot perform shoot")
-      );
 
       const wizard = new Wizard();
       const resultWizard = checkAttackerAndShoot(Option.some(wizard));
-      const expectedWizard = Either.left(
-        invalidAttackerFailure("Wizard cannot perform shoot")
-      );
 
-      expect(resultWarrior).toStrictEqual(expectedWarrior);
+      expectFailure(resultWarrior, Exo2FailureType.InvalidAttacker);
 
-      expect(resultWizard).toStrictEqual(expectedWizard);
+      expectFailure(resultWizard, Exo2FailureType.InvalidAttacker);
     });
 
     it("should return the proper type of damage", () => {
