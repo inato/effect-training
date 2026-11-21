@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "decod": "^6.1.6",
-    "effect": "^3.14.8",
+    "effect": "^3.20.0",
     "fp-ts": "^2.16.10"
   },
   "scripts": {
